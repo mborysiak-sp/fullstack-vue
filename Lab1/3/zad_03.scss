@@ -1,0 +1,23 @@
+#menu {
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+    width: 50%;
+    flex: auto;
+}
+
+body {
+    display: flex;
+    width: 100%;
+    background-color: lightgray;
+}
+
+.el_menu {
+    text-align: center;
+}
+#tresc {
+    float: left;
+    border-left-color: black;
+    border-left: solid;
+    padding: 1%;
+}

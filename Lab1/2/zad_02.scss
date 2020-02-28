@@ -1,0 +1,26 @@
+#menu {
+    position: fixed;
+    background-color: lightgray;
+    border: solid;
+    border-color: gray;
+    border-bottom-color:black;
+    text-align: center;
+    width: 100%;
+    top: 1%;
+    padding: 0.5%;
+}
+
+.el_menu {
+    border: solid;
+    border-color: black;
+    padding: 0.5%;
+    background-color: lightgray;
+}
+
+a {
+    color: red;
+}
+
+a:visited {
+    background-color: black;
+}

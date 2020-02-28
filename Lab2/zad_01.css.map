@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,MAAM,AAAA,UAAW,CAAA,EAAE,EAAE;EACjB,gBAAgB,EAAE,GAAG;CAExB",
+    "sources": [
+        "zad_01.scss"
+    ],
+    "names": [],
+    "file": "zad_01.css"
+}

@@ -1,0 +1,36 @@
+#menu {
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+    width: 50%;
+    flex: auto;
+}
+#naglowek {
+    position: fixed;
+    top: 0;
+    left: 0;
+    border: solid black 1px;
+    background-color: pink;
+}
+#stopka {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border: solid black 1px;
+    background-color: pink;
+}
+body {
+    display: flex;
+    width: 100%;
+    background-color: lightgray;
+}
+
+.el_menu {
+    text-align: center;
+}
+#tresc {
+    float: left;
+    border-left-color: black;
+    border-left: solid;
+    padding: 1%;
+}
