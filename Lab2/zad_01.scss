@@ -1,5 +1,31 @@
+$size: 100px;
+#outer {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100vh;
+    position: relative;
 
-#outer:nth-child(2n) {
-    background-color: red;
+    .box {
+        width: $size;
+        height: $size;
+        text-align: center;
+        padding: auto;
 
+        line-height: 100px; 
+        font-size: 32px;
+        color: white;
+    }
+    .box:nth-child(2) {
+        background-color: darkgrey;
+    }
+    .box:nth-child(1) {
+        background-color: grey;
+        align-self: flex-start;
+    }
+    .box:nth-child(3) {
+        background-color: whitesmoke;
+        align-self: flex-end;
+    }
 }
