@@ -1,0 +1,26 @@
+#all {
+    display: flex;
+    flex-direction: row;
+
+    #menu {
+        width: 200px;
+        text-align: center;
+        vertical-align: center;
+        background-color: #a2a3a0;
+        padding: 20px;
+
+        p {
+            width: 100px;
+            text-align: center;
+            vertical-align: center;
+            background-color: whitesmoke;
+            border-left: 2px solid gray;
+            border-top: 1px solid gray;
+        }
+    }
+
+    #main {
+        padding: 20px;
+        background-color: lightgray;
+    }
+}

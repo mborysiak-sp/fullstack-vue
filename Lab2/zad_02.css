@@ -1,0 +1,32 @@
+#all {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+#all #menu {
+  width: 200px;
+  text-align: center;
+  vertical-align: center;
+  background-color: #a2a3a0;
+  padding: 20px;
+}
+
+#all #menu p {
+  width: 100px;
+  text-align: center;
+  vertical-align: center;
+  background-color: whitesmoke;
+  border-left: 2px solid gray;
+  border-top: 1px solid gray;
+}
+
+#all #main {
+  padding: 20px;
+  background-color: lightgray;
+}
+/*# sourceMappingURL=zad_02.css.map */
