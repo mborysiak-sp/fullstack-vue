@@ -28,5 +28,4 @@ window.addEventListener("DOMContentLoaded", () => {
     let el = li.getElementsByTagName('button')[0];
 
     el.onclick = dodajGuzik;
-
 })
