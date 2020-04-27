@@ -6,10 +6,17 @@
 
 const express = require("express");
 const router = express.Router();
+const uuid = require("uuidv4").uuid;
+const moveRater = require("./mastermind");
 
 router.route("/")
     .post((req, res) => {
         let params = req.body;
+        req.session.id = uuid();
+        let code = "";
+        for (let i = 0; i < params.size; i++) {
+            code += getRandomInt(params.dim).toString();
+        }
         // tworzymy nową grę
         res.json({
             msg: "nowa gra",
@@ -26,3 +33,7 @@ router.route("/")
     });
 
 module.exports = router;
+
+const getRandomInt = (max) => {
+    return Math.floor(Math.random() * max) + 1;
+}
