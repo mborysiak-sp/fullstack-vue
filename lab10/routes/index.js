@@ -15,8 +15,9 @@ router.route("/")
         req.session.id = uuid();
         let code = "";
         for (let i = 0; i < params.size; i++) {
-            code += getRandomInt(params.dim).toString();
+            code += getRandomInt(1, params.dim).toString();
         }
+        console.log("wypisuje kod");
         console.log(code);
         req.session.code = code;
         // tworzymy nową grę
@@ -27,7 +28,7 @@ router.route("/")
     })
     .patch((req, res) => {
         let results = moveRater.rateMoves(
-            req.body.combination,
+            req.body.guess,
             req.session.code
         );
         // oceniamy ruch
