@@ -28,10 +28,6 @@ function guess() {
 
             hRight.innerHTML = "Black: " + black + " &emsp; White: " + white;
 
-            remaining = remaining - (black + white);
-
-            document.getElementById("unrated").innerHTML = remaining;
-
             if (remaining === 0) {
                 document.getElementById("guess").style.visibility = "hidden";
 
@@ -55,15 +51,18 @@ function guess() {
 
     let triesLeft = document.getElementById("tries-left").innerHTML;
 
-    if (!isNaN(triesLeft)) {
-        document.getElementById("tries-left").innerHTML = triesLeft - 1;
-
-        if (triesLeft - 1 === 0) {
-            document.getElementById("guess").style.visibility = "hidden";
-
-            document.getElementById("guess-btn").style.visibility = "hidden";
-        }
+    if (isNaN(triesLeft)) {
+        return;
     }
+
+    document.getElementById("tries-left").innerHTML = triesLeft - 1;
+
+    if (triesLeft - 1 !== 0) {
+        return;
+    }
+
+    document.getElementById("guess").style.visibility = "hidden";
+    document.getElementById("guess-btn").style.visibility = "hidden";
 }
 
 function newGame() {
