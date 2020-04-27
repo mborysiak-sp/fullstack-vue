@@ -17,6 +17,8 @@ router.route("/")
         for (let i = 0; i < params.size; i++) {
             code += getRandomInt(params.dim).toString();
         }
+        console.log(code);
+        req.session.code = code;
         // tworzymy nową grę
         res.json({
             msg: "nowa gra",
@@ -24,16 +26,22 @@ router.route("/")
         });
     })
     .patch((req, res) => {
-        let ruch = req.body;
+        let results = moveRater.rateMoves(
+            req.body.combination,
+            req.session.code
+        );
         // oceniamy ruch
         res.json({
             msg: "ocena ruchu",
-            ruch
+            blackCount: results[0],
+            whiteCount: results[1]
         });
     });
 
 module.exports = router;
 
-const getRandomInt = (max) => {
-    return Math.floor(Math.random() * max) + 1;
+const getRandomInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
