@@ -1,30 +1,36 @@
-// ładujemy wykorzystywane moduły:
+// konfiguracja aplikacji – dostęp przez zmienne środowiskowe
+require("dotenv").config();
 
-// express – jako „podstawa aplikacji”
+// jako „bazy” używamy Express.js
 const express = require("express");
-// cookie-session – w sesji zapamiętamy identyfikator rozgrywki
-const cookieSession = require("cookie-session");
-// drobiazgi do sprawnego i czytelnego logowania
-const logger = require("morgan");
-const errorHandler = require("errorhandler");
+const app = express();
+app.set("view engine", "ejs");
 
-// parametry – ewentualnie przekazywane poprzez zmienne środowiskowe
-const port = process.env.PORT || 3000;
-const secret = process.env.SECRET || "$uper $ecret";
+// wszelkie dane przesyłamy w formacie JSON
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 const env = process.env.NODE_ENV || "development";
 
-// tworzymy i konfigurujemy obiekt aplikacji
-const app = express();
+// machnaizm sesji – z wykorzystaniem ciasteczek
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
-// obsługa danych typu application/json
-app.use(express.json());
-// obsługa sesji za pomocą ciasteczek
-app.use(cookieSession({secret: secret}));
+const expressSession = require("express-session");
+app.use(expressSession({
+    secret: process.env.APP_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
 
 const path = require("path");
 app.use("/lib", express.static(path.normalize("./node_modules/axios/dist")));
 
-// middleware do kompilacji SCSS -> CSS
+const logger = require("morgan");
+const errorHandler = require("errorhandler");
+
+app.use(express.static(path.join(__dirname, "public")));
+
 const sass = require("node-sass-middleware");
 app.use(sass({
     src: path.join(__dirname, "/src"),
@@ -33,10 +39,6 @@ app.use(sass({
     outputStyle: "compressed",
 }));
 
-// główny „serwer statyczny”
-app.use(express.static(path.join(__dirname, "public")));
-
-// w zależności od trybu działania wybieramy odpowiedni poziom logowania
 if ("development" === env) {
     app.use(logger("dev"));
     app.use(errorHandler());
@@ -44,20 +46,26 @@ if ("development" === env) {
     app.use(logger("short"));
 }
 
-// importujemy obsługę zapytań
+// do obsługi autoryzacji używamy Passport.js
+const passport = require("./passport");
+app.use(passport.initialize());
+app.use(passport.session());
+
+// routing aplikacji
 const routes = require("./routes");
-
-// i „podłączamy” ją pod adres „/mmind”
-app.use("/mmind", routes);
-
-// przechwytujemy niepoprawne odwołania do serwera
-app.use((req, res) => {
-    res.status(404).json({
-        error: `Niepoprawne żądanie: ${req.method} ${req.originalUrl}`
-    });
+app.use(routes);
+// wyłapujemy odwołania do nieobsługiwanych adresów
+app.use((_, res) => {
+    // Not Found
+    res.sendStatus(404);
 });
 
-// uruchamiamy serwer z aplikacją
-app.listen(port, () => {
-    console.log(`Serwer gry dostępny na porcie ${port}`);
+// Serwer HTTPS
+// openssl req -x509 -nodes -days 365 -newkey rsa:1024 -out my.crt -keyout my.key
+const server = require("./https")(app);
+const port = process.env.port;
+
+server.listen(port, () => {
+    console.log(`Serwer działa pod adresem: https://localhost:${port}`);
 });
+
