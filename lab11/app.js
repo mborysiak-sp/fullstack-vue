@@ -29,8 +29,6 @@ app.use("/lib", express.static(path.normalize("./node_modules/axios/dist")));
 const logger = require("morgan");
 const errorHandler = require("errorhandler");
 
-app.use(express.static(path.join(__dirname, "public")));
-
 const sass = require("node-sass-middleware");
 app.use(sass({
     src: path.join(__dirname, "/src"),
@@ -54,6 +52,7 @@ app.use(passport.session());
 // routing aplikacji
 const routes = require("./routes");
 app.use(routes);
+
 // wyłapujemy odwołania do nieobsługiwanych adresów
 app.use((_, res) => {
     // Not Found
