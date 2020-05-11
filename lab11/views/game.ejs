@@ -2,9 +2,9 @@
 <html>
   <head>
     <title>Mastermind</title>
-    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='public/css/style.css' />
     <script src='/lib/axios.min.js'></script>
-    <script src='/js/skrypt.js'></script>
+    <script src='/public/js/skrypt.js'></script>
   </head>
   <body>
     <div id="ui">
@@ -22,6 +22,10 @@
         </div>
         <div id="currentgame">
           <div id="score">
+            <div>
+              <h2>Blacks: <span id="black-score">#</span></h2>
+              <h2>Whites: <span id="white-score">#</span></h2>
+            </div>
             <div>
               <h2>Left: <span id="unrated">#</span></h2>
               <h2>Tries left: <span id="tries-left">#</span></h2>

@@ -4,8 +4,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function guess() {
 
-    let user = document.getElementById("userId").value;
-
     let guess = document.getElementById("guess").value;
 
     let newGuess = document.createElement("div");
@@ -21,7 +19,7 @@ function guess() {
     let remaining = parseInt(document.getElementById("unrated").innerHTML);
 
     axios
-        .patch("/mmind", {
+        .patch("/game", {
             guess: guess,
         })
         .then((resp) => {
@@ -92,13 +90,13 @@ function newGame() {
     document.getElementById("guess-btn").style.visibility = "visible";
 
     axios
-        .post("/mmind", {
+        .post("/game", {
             size: size,
             dim: dim,
             max: max,
         })
         .then((resp) => {
-            console.log("Odpowiedź serwera na POST /mmind:");
+            console.log("Odpowiedź serwera na POST /game:");
             console.dir(resp.data);
         });
 
