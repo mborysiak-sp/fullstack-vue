@@ -32,7 +32,7 @@ const errorHandler = require("errorhandler");
 const sass = require("node-sass-middleware");
 app.use(sass({
     src: path.join(__dirname, "/src"),
-    dest: path.join(__dirname, "/public"),
+    dest: path.join(__dirname, "/views"),
     debug: true,
     outputStyle: "compressed",
 }));
@@ -44,7 +44,7 @@ if ("development" === env) {
     app.use(logger("short"));
 }
 
-// do obsługi autoryzacji używamy Passport.js
+// do obsługi autoryzacji uży`w`amy Passport.js
 const passport = require("./passport");
 app.use(passport.initialize());
 app.use(passport.session());
@@ -52,6 +52,8 @@ app.use(passport.session());
 // routing aplikacji
 const routes = require("./routes");
 app.use(routes);
+
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 // wyłapujemy odwołania do nieobsługiwanych adresów
 app.use((_, res) => {

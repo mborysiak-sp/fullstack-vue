@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Strona główna</title>
+    <title>Mastermind</title>
 </head>
 <body>
     <p>
         <% if (isAuthenticated) { %>
-            Witaj <%= user.username %><br>
-            <a href="/logout">Wyloguj</a>
+            Hello <%= user.username %><br>
+            <a href="/logout">Logout</a>
         <% } else { %>
             <a href="/login">Login</a>
         <% } %>

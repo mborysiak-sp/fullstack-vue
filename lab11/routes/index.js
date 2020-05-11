@@ -2,13 +2,10 @@ const express = require("express");
 const router = new express.Router();
 const User = require("../model");
 
-// Passport.js i narzędzie do szyfrowania haseł
 const passport = require("../passport");
 const bcrypt = require("../bcrypt");
 
-// „wyłapywanie”  odwołań nieobsługiwanymi metodami HTTP
 const rejectMethod = (_req, res, _next) => {
-    // Method Not Allowed
     res.sendStatus(405);
 };
 
@@ -25,9 +22,26 @@ router
 router
     .route("/login")
     .get((req, res) => {
+        if (req.isAuthenticated()) {
+            res.redirect("/");
+        } else {
         res.render("login");
+        }
     })
     .post(passport.authenticate("local"), async (req, res) => {
+        await res.redirect("/game");
+    })
+    .all(rejectMethod);
+
+router
+    .route("/register")
+    .get((req, res) => {
+        if (req.isAuthenticated()) {
+            res.redirect("/");
+        } else {
+            res.render("register");
+        }})
+    .post(passport.authenticate("local-signup"), async (req, res) => {
         await res.redirect("/");
     })
     .all(rejectMethod);
@@ -41,9 +55,7 @@ router
     .all(rejectMethod);
 
 router
-    .route("/register")
-    // „dla treningu”, inaczej niż w przykładzie z wykładu
-    // (tsw-mongo-crud) użyjemy tutaj async/await
+    .route("/api/register")
     .post(async (req, res) => {
         try {
             let passwordHash = bcrypt.hash(req.body.password);
@@ -66,10 +78,8 @@ router
     })
     .all(rejectMethod);
 
-// przykładowe „API” – oczwiście musi być serwowane przez HTTPS!
 router
     .route("/api/users")
-    // tutaj uwierzytelniamy się przez HTTP – metodą Basic
     .get(passport.authenticate("basic", {
         session: false
     }), (req, res) => {

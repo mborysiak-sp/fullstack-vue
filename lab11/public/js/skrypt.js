@@ -3,6 +3,9 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function guess() {
+
+    let user = document.getElementById("userId").value;
+
     let guess = document.getElementById("guess").value;
 
     let newGuess = document.createElement("div");
