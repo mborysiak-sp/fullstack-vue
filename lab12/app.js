@@ -1,24 +1,46 @@
 const express = require("express");
-const http = require("http");
 const path = require("path");
 const socketio = require("socket.io");
+const formatMessage = require("./utils/messages.js")
 
 const app = express();
-const server = http.createServer(app);
+const server = require("./https")(app);
 const io = socketio.listen(server);
+const botName = "ChatBox";
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+const passport = require("./passport");
+app.use(passport.initialize());
+app.use(passport.session());
+
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
+const expressSession = require("express-session");
+app.use(expressSession({
+    secret: process.env.APP_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+
 
 io.on("connection", socket => {
-    socket.emit("message", "Wilkommen");
+    socket.on("joinRoom", ({username, room}) => {
+        socket.emit("message", formatMessage(botName,"Wilkommen"));
 
-    socket.broadcast.emit("message", "A user has joined");
-
-    socket.on("disconnect", () => {
-        io.emit("message", "A user has left");
+        socket.broadcast.emit("message", formatMessage(botName,"A user has joined"));
+        
     });
 
     socket.on("chatMessage", msg => {
-        io.emit("message", msg);
-    })
+        io.emit("message", formatMessage("USER", msg));
+    });
+
+    socket.on("disconnect", () => {
+        io.emit("message", formatMessage(botName,"A user has left"));
+    });
 });
 
 app.set("view engine", "ejs");
