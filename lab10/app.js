@@ -24,7 +24,7 @@ app.use(cookieSession({secret: secret}));
 const path = require("path");
 app.use("/lib", express.static(path.normalize("./node_modules/axios/dist")));
 
-// middleware do kompilacji SCSS -> CSS
+// middleware do kompilacji SCSS -> `CSS
 const sass = require("node-sass-middleware");
 app.use(sass({
     src: path.join(__dirname, "/src"),

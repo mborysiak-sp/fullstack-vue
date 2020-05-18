@@ -15,20 +15,41 @@ const userSchema = new Schema({
     }
 });
 
-// bez poniższej wtyczki nie dostaniemy sensownego sygnału
-// błędu przy naruszeniu „unikatowości” nazwy użytkownika
+const messageSchema = new Schema({
+    handle: {
+        type: String,
+        required: true,
+    },
+    content: {
+        type: String,
+        required: true,
+    }
+});
+
+const roomSchema = new Schema({
+    roomname: {
+        type: String,
+        required: true,
+        unique: true,
+        minlength: 2
+    },
+    messages: [messageSchema]
+});
+
 const uniqueValidator = require("mongoose-unique-validator");
-// ale z nią – już wszystko będzie jak należy
 userSchema.plugin(uniqueValidator);
+roomSchema.plugin(uniqueValidator);
 
 userSchema.methods.isValidPassword = function (password) {
     return bcrypt.compare(password, this.password);
 };
 
+const Room = mongoose.model("Room", roomSchema);
+const Message = mongoose.model("Message", messageSchema);
 const User = mongoose.model("User", userSchema);
 
-// mały „postprocessing” błędów mongoosowych
-User.processErrors = (err) => {
+const errorHandler = {};
+errorHandler.processErrors = (err) => {
     let msg = {};
     for (let key in err.errors) {
         msg[key] = err.errors[key].message;
@@ -36,4 +57,8 @@ User.processErrors = (err) => {
     return msg;
 };
 
+
+module.exports.message = Message;
+module.exports.errorHandler = errorHandler;
+module.exports = Room;
 module.exports = User;

@@ -1,10 +1,14 @@
 const express = require("express");
-const path = require("path");
-const socketio = require("socket.io");
-const formatMessage = require("./utils/messages.js")
-
 const app = express();
 const server = require("./https")(app);
+const path = require("path");
+
+const favicon = require("serve-favicon");
+app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
+
+const socketio = require("socket.io");
+const passportSocketIo = require("passport.socketio");
+let formatMessage = require("./utils/messages.js")
 const io = socketio.listen(server);
 const botName = "ChatBox";
 
@@ -19,12 +23,25 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 const expressSession = require("express-session");
+const mongoose = require("mongoose/index");
+
+const MongoStore = require('connect-mongo')(expressSession);
+const sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+
 app.use(expressSession({
     secret: process.env.APP_SECRET,
+    store: sessionStore,
     resave: false,
     saveUninitialized: false
 }));
 
+io.use(passportSocketIo.authorize({
+    key: "connect.sid",
+    secret: process.env.APP_SECRET,
+    store: sessionStore,
+    passport: passport,
+    cookieParser: cookieParser
+}));
 
 io.on("connection", socket => {
     socket.on("joinRoom", ({username, room}) => {
@@ -35,7 +52,7 @@ io.on("connection", socket => {
     });
 
     socket.on("chatMessage", msg => {
-        io.emit("message", formatMessage("USER", msg));
+        io.emit("message", formatMessage(socket.request.user.username, msg));
     });
 
     socket.on("disconnect", () => {
@@ -65,4 +82,4 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 
 const PORT = 3000 || process.env.PORT;
 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on address https://localhost:${PORT}`));
