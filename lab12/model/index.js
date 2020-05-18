@@ -26,6 +26,8 @@ const messageSchema = new Schema({
     }
 });
 
+
+
 const roomSchema = new Schema({
     roomname: {
         type: String,
@@ -58,7 +60,7 @@ errorHandler.processErrors = (err) => {
 };
 
 
-module.exports.message = Message;
-module.exports.errorHandler = errorHandler;
+module.exports = Message;
+module.exports = errorHandler;
 module.exports = Room;
 module.exports = User;

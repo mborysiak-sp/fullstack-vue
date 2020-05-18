@@ -9,9 +9,11 @@
         <% if (isAuthenticated) { %>
             Hello <%= user.username %><br>
             <a href="/logout">Logout</a>
+            <a href="/rooms"></a>
         <% } else { %>
             <a href="/login">Login</a>
         <% } %>
+
     </p>
 </body>
 </html>
