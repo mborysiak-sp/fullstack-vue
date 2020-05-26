@@ -23,7 +23,7 @@ const passport = require("./passport");
 app.use(passport.initialize());
 app.use(passport.session());
 
-const routes = require("./routes/api/index");
+const routes = require("./router/api/index");
 app.use("/api", routes);
 
 const port = process.env.PORT;
