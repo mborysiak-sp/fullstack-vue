@@ -11,11 +11,7 @@ module.exports = {
     }
   },
   devServer: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:5000"
-      }
-    }
+    proxy: "http://localhost:" + process.env.PORT
   },
   outputDir: path.resolve(__dirname, "../server/public")
 };
