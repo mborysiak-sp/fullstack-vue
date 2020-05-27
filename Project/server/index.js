@@ -3,7 +3,6 @@ require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 
 // App initialization
 const app = express();
@@ -14,8 +13,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(bodyParser.json());
-
-app.use(cors());
 
 app.use(require("cookie-parser")());
 
