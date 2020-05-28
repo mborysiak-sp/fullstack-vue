@@ -4,12 +4,14 @@ import axios from "axios";
 const state = {
   user: {},
   status: "",
+  isAuthenticated: false,
   error: null
 };
 
 const getters = {
   user: state => state.user,
   authState: state => state.status,
+  isAuthenticated: state => state.isAuthenticated,
   error: state => state.error
 };
 
@@ -18,17 +20,43 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit("auth_request");
       axios.post(
-        "http://localhost:5000/api/login",
+        "/api/login",
         user,
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json" }, withCredentials: true }
       )
         .then((resp) => {
           user = resp.data.user;
           commit("auth_success", user);
-          resolve();
+          resolve(resp);
         })
         .catch(err => {
           commit("auth_error", err);
+          reject(err);
+        });
+    });
+  },
+  logout ({ commit }) {
+    return new Promise((resolve, reject) => {
+      commit("auth_request");
+      axios.get("/api/logout", { withCredentials: true })
+        .then((resp) => {
+          commit("auth_logout");
+          resolve(resp);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  getUser ({ commit }) {
+    return new Promise((resolve, reject) => {
+      commit("auth_request");
+      axios.get("/api/user-status", { withCredentials: true })
+        .then((resp) => {
+          commit("auth_refresh", resp.data.user, resp.data.isAuthenticated);
+          resolve(resp);
+        })
+        .catch((err) => {
           reject(err);
         });
     });
@@ -36,6 +64,10 @@ const actions = {
 };
 
 const mutations = {
+  auth_logout (state) {
+    state.user = null;
+    state.status = "";
+  },
   auth_request (state) {
     state.error = null;
     state.status = "loading";
@@ -47,6 +79,10 @@ const mutations = {
   },
   auth_error (state, err) {
     state.error = err;
+  },
+  auth_refresh (state, user, isAuthenticated) {
+    state.user = user;
+    state.isAuthenticated = isAuthenticated;
   }
 };
 

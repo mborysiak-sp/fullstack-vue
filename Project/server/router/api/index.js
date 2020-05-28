@@ -47,15 +47,15 @@ router
   })
   .all(rejectMethod);
 
-function isLoggedIn (req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
+// function isLoggedIn (req, res, next) {
+//   if (req.isAuthenticated()) {
+//     return next();
+//   }
 
-  res.redirect("/");
+//   res.redirect("/");
 
-  console.log("Authentication failed");
-}
+//   console.log("Authentication failed");
+// }
 
 router
   .route("/user-status")
@@ -63,12 +63,12 @@ router
     if (req.isAuthenticated()) {
       res.json({
         isAuthenticated: true,
-        username: req.user.username
+        user: req.user
       });
     } else {
       res.json({
         isAuthenticated: false,
-        username: ""
+        user: {}
       });
     }
   })
@@ -91,8 +91,12 @@ router
 router
   .route("/logout")
   .get((req, res) => {
-    req.logout();
-    res.send();
+    console.log("beforeauth");
+    if (req.isAuthenticated()) {
+      req.logout();
+      console.log("authenticated");
+      res.send();
+    }
   })
   .all(rejectMethod);
 
@@ -167,7 +171,7 @@ router
 //     if (req.user) {
 //       res.send({ current_user: req.user });
 //     } else {
-//       res.status(403).send({ success: false, message: "Unauthorized" });
+//       res.status(403).send({ isAuthenticated: false, message: "notLoggedIn" });
 //     }
 //   });
 
