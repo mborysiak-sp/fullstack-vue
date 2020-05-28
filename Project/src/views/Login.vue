@@ -1,24 +1,22 @@
 <template>
   <div>
-    <h2>Login</h2>
-    <div class="row">
+    <div class="login">
       <h4>Login</h4>
-      <form @submit.prevent="loginUser">
-        <label for="username">Username</label>
-        <input type="text"
-          id="username"
-          placeholder="Username"
+      <form class="form" ref="form">
+        <label>Username</label>
+        <input
+          type="text"
           name="username"
           v-model="username"
-          class="form-control">
-        <label for="password">Password</label>
-        <input type="password"
-          id="password"
-          placeholder="Password"
+          required >
+        <label>Password</label>
+        <input
+          type="password"
           name="password"
           v-model="password"
-          class="form-control">
-          <input type="submit" class="login-button" value="Login">
+          required >
+        <input type="button" @click="submit" value="Submit">
+        <input type="button" @click="clear" value="Clear">
       </form>
     </div>
   </div>
@@ -26,6 +24,7 @@
 
 <script>
 import { mapActions } from "vuex";
+
 export default {
   data () {
     return {
@@ -35,19 +34,23 @@ export default {
   },
   methods: {
     ...mapActions(["login"]),
-    loginUser () {
+    async submit () {
       const user = {
         username: this.username,
         password: this.password
       };
       this.login(user)
         .then(() => {
-          this.$router.push("/");
+          this.$swal("Great", "Ready", "success");
+          this.$router.push({ name: "Home" });
         })
-        // eslint-disable-next-line handle-callback-err
-        .catch(err => {
-          console.log("Cannot log in");
+        .catch((error) => {
+          const message = error.response.data.message;
+          this.$swal("Oh ho", `${message}`, "error");
         });
+    },
+    clear () {
+      this.$refs.form.reset();
     }
   }
 };

@@ -1,4 +1,5 @@
 import axios from "axios";
+// import passport from "passport";
 // import router from "../router";
 const state = {
   user: {},
@@ -16,9 +17,13 @@ const actions = {
   login ({ commit }, user) {
     return new Promise((resolve, reject) => {
       commit("auth_request");
-      axios.post("http://localhost:" + process.env.PORT + "/api/login", user)
-        .then(res => {
-          user = res.data.user;
+      axios.post(
+        "http://localhost:5000/api/login",
+        user,
+        { headers: { "Content-Type": "application/json" } }
+      )
+        .then((resp) => {
+          user = resp.data.user;
           commit("auth_success", user);
           resolve();
         })
