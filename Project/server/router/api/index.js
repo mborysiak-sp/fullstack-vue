@@ -13,16 +13,6 @@ const rejectMethod = (_req, res, _next) => {
   res.sendStatus(405);
 };
 
-// const authMiddleware = (req, res, next) => {
-//   if (req.isAuthenticated()) {
-//     return next();
-//   } else {
-//     res.status(403).json({
-//       message: "not authenticated"
-//     });
-//   }
-// };
-
 router
   .route("/register")
   .post(async (req, res) => {
@@ -80,13 +70,6 @@ router
     res.status(200).send({ isAuthenticated: true, user: req.user });
   })
   .all(rejectMethod);
-
-// router
-//   .route("/login")
-//   .post(passport.authenticate("local"), async (req, res) => {
-//     await res.redirect("/user-status");
-//   })
-//   .all(rejectMethod);
 
 router
   .route("/logout")
@@ -164,16 +147,6 @@ router
     if (req.isAuthenticated()) { res.send("Home page"); } else { res.redirect("/login"); }
   })
   .all(rejectMethod);
-
-// router
-//   .route("/current_user")
-//   .get("/current_user", isLoggedIn, function (req, res) {
-//     if (req.user) {
-//       res.send({ current_user: req.user });
-//     } else {
-//       res.status(403).send({ isAuthenticated: false, message: "notLoggedIn" });
-//     }
-//   });
 
 router
   .route("/create")
