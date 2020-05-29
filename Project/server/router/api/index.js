@@ -17,18 +17,22 @@ router
   .route("/register")
   .post(async (req, res) => {
     try {
+      console.log(req.body.password);
+      console.log(req.body.username);
       const passwordHash = bcrypt.hash(req.body.password);
       const user = new User({
         username: req.body.username,
         password: passwordHash
       });
-      const doc = await user.save();
-      res.json(doc);
+      console.log(user.password);
+      await user.save();
+      console.log("done save");
+      res.status(200).json("Registered user");
     } catch (err) {
       if (!req.body.password) {
         // Unprocessable Entity
         res.status(422).json({
-          password: "Error – password must not be empty!"
+          password: "Password must not be empty!"
         });
       } else if (err !== undefined) {
         res.status(422).json(processErrors(err));
@@ -48,16 +52,16 @@ router
 // }
 
 router
-  .route("/user-status")
+  .route("/user_status")
   .get((req, res) => {
     if (req.isAuthenticated()) {
-      res.json({
-        isAuthenticated: true,
+      res.send({
+        isAuthenticated: req.isAuthenticated(),
         user: req.user
       });
     } else {
-      res.json({
-        isAuthenticated: false,
+      res.send({
+        isAuthenticated: req.isAuthenticated(),
         user: {}
       });
     }

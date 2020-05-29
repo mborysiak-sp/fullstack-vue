@@ -1,24 +1,18 @@
 import axios from "axios";
-// import passport from "passport";
-// import router from "../router";
+
 const state = {
   user: {},
-  status: "",
-  isAuthenticated: false,
-  error: null
+  isAuthenticated: false
 };
 
 const getters = {
   user: state => state.user,
-  authState: state => state.status,
-  isAuthenticated: state => state.isAuthenticated,
-  error: state => state.error
+  isAuthenticated: state => state.isAuthenticated
 };
 
 const actions = {
   login ({ commit }, user) {
     return new Promise((resolve, reject) => {
-      commit("auth_request");
       axios.post(
         "/api/login",
         user,
@@ -30,14 +24,12 @@ const actions = {
           resolve(resp);
         })
         .catch(err => {
-          commit("auth_error", err);
           reject(err);
         });
     });
   },
   logout ({ commit }) {
     return new Promise((resolve, reject) => {
-      commit("auth_request");
       axios.get("/api/logout", { withCredentials: true })
         .then((resp) => {
           commit("auth_logout");
@@ -48,10 +40,9 @@ const actions = {
         });
     });
   },
-  getUser ({ commit }) {
+  setUser ({ commit }) {
     return new Promise((resolve, reject) => {
-      commit("auth_request");
-      axios.get("/api/user-status", { withCredentials: true })
+      axios.get("/api/user_status", { withCredentials: true })
         .then((resp) => {
           commit("auth_refresh", resp.data.user, resp.data.isAuthenticated);
           resolve(resp);
@@ -66,19 +57,12 @@ const actions = {
 const mutations = {
   auth_logout (state) {
     state.user = null;
-    state.status = "";
-  },
-  auth_request (state) {
-    state.error = null;
-    state.status = "loading";
+    state.isAuthenticated = false;
   },
   auth_success (state, user) {
     state.user = user;
-    state.status = "success";
+    state.isAuthenticated = true;
     state.error = null;
-  },
-  auth_error (state, err) {
-    state.error = err;
   },
   auth_refresh (state, user, isAuthenticated) {
     state.user = user;

@@ -48,8 +48,8 @@ axios.config = axiosConfig;
 
 app.use(bodyParser.json());
 
-const routes = require("./router/api/index");
-app.use("/api", routes);
+const router = require("./router/api/index");
+app.use("/api", router);
 app.use((_, res) => {
   res.sendStatus(404);
 });
