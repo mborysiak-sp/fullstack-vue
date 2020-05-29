@@ -100,6 +100,21 @@ router
   })
   .all(rejectMethod);
 
+router.route("/auctions")
+  .get((req, res) => {
+    Auction.find(
+      { status: "ONGOING" }
+    ).limit(10)
+      .sort({ bidders: -1 })
+      .exec((err, docs) => {
+        if (err) {
+          res.json(err);
+        } else {
+          res.json(docs);
+        }
+      });
+  });
+
 router
   .route("/buy")
   .post((req, res) => {
@@ -122,7 +137,7 @@ router
       if (err) {
         res.json(err);
       } else {
-        doc.status = "BID";
+        doc.status = "ONGOING";
         doc.save();
       }
     });
@@ -169,15 +184,12 @@ router
   })
   .post((req, res) => {
     if (req.isAuthenticated()) {
-      const auctionName = req.body.name;
-      const auctionPrice = req.body.price;
-
       const auction = new Auction({
         username: req.user.username,
         status: req.body.status,
         type: req.body.type,
-        name: auctionName,
-        price: auctionPrice,
+        name: req.body.name,
+        price: req.body.price,
         bidders: []
       });
 
@@ -186,7 +198,7 @@ router
       } catch {
         res.json("Couldn't save auction");
       }
-      res.redirect("/auction/myauctions");
+      // res.redirect("/auction/myauctions");
     } else {
       res.json("Must be authenticated");
     }
@@ -199,7 +211,7 @@ router
     if (req.isAuthenticated()) {
       Auction.find({
         $or: [{ username: req.user.username, status: "NEW" },
-          { username: req.user.username, status: "BID" }]
+          { username: req.user.username, status: "ONGOING" }]
       }, (err, doc) => {
         if (err) {
           res.json(err);

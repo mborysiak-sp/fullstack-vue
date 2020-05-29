@@ -4,9 +4,7 @@
       <router-link to="/">Home</router-link>
       <router-link to="/register">Register</router-link>
     </div>
-    <div class="cont">
-      <router-view />
-    </div>
+    <router-view />
   </div>
 
 </template>

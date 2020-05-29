@@ -1,7 +1,7 @@
 <template>
   <div class="register-form">
     <h4>Register</h4>
-    <form class="form" ref="form">
+    <form ref="form">
       <label>Username</label>
       <input
         type="text"

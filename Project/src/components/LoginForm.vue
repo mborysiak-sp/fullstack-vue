@@ -1,7 +1,7 @@
 <template>
   <div class="login-form">
     <h4>Login</h4>
-    <form class="form" ref="form">
+    <form ref="form">
       <label>Username</label>
       <input
         type="text"
@@ -14,7 +14,7 @@
         name="password"
         v-model="password"
         required >
-      <input type="button" @click="login" value="Submit">
+      <input type="button" @click="submit" value="Submit">
       <input type="button" @click="clear" value="Clear">
     </form>
   </div>
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     ...mapActions(["login", "logError"]),
-    async login () {
+    async submit () {
       const user = {
         username: this.username,
         password: this.password
