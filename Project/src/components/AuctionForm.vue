@@ -4,10 +4,10 @@
       <input v-model="name" id="name" type="text" minlength="2" placeholder="Name">
       <input v-model="price" id="price" type="number" min="1" step="1" placeholder="Price">
       <select v-model="type" id="select" name ="select">
-        <option value="BID">Bid</option>
-        <option value="BUY">Buy</option>
+        <option value="BID">BID</option>
+        <option value="BUY">BUY</option>
       </select>
-      <div v-if="type === 'Bid'">
+      <div v-if="type === 'BID'">
         <input type="number" v-model="duration" placeholder="Duration">
       </div>
       <input type="button" @click="create" value="Submit">
@@ -40,7 +40,7 @@ export default {
         status: "NEW",
         duration: this.name
       };
-      axios.post(
+      await axios.post(
         "/api/create",
         auction,
         { withCredentials: true }

@@ -44,7 +44,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       axios.get("/api/user_status", { withCredentials: true })
         .then((resp) => {
-          commit("auth_refresh", resp.data.user, resp.data.isAuthenticated);
+          commit("auth_refresh", resp.data);
           resolve(resp);
         })
         .catch((err) => {
@@ -64,9 +64,9 @@ const mutations = {
     state.isAuthenticated = true;
     state.error = null;
   },
-  auth_refresh (state, user, isAuthenticated) {
-    state.user = user;
-    state.isAuthenticated = isAuthenticated;
+  auth_refresh (state, data) {
+    state.user = data.user;
+    state.isAuthenticated = data.isAuthenticated;
   }
 };
 

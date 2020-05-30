@@ -55,12 +55,12 @@ router
   .route("/user_status")
   .get((req, res) => {
     if (req.isAuthenticated()) {
-      res.send({
+      res.json({
         isAuthenticated: req.isAuthenticated(),
         user: req.user
       });
     } else {
-      res.send({
+      res.json({
         isAuthenticated: req.isAuthenticated(),
         user: {}
       });
@@ -192,15 +192,15 @@ router
         price: req.body.price,
         bidders: []
       });
-
       try {
         auction.save();
-      } catch {
-        res.json("Couldn't save auction");
+        res.status(201).json({ msg: "Auction saved" });
+      } catch (err) {
+        res.status(500).json({ msg: err });
       }
       // res.redirect("/auction/myauctions");
     } else {
-      res.json("Must be authenticated");
+      res.status(401).json({ msg: "Must be authenticated" });
     }
   })
   .all(rejectMethod);

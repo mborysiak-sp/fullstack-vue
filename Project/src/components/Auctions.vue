@@ -4,6 +4,7 @@
       <div class="auction" @click="navigateTo(auction)">
         <div class="auction-name">
           <p>{{auction.name}}</p>
+          <p>{{auction.username}}</p>
         </div>
       </div>
     </div>
