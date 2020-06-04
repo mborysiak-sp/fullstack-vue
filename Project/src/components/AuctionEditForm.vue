@@ -47,12 +47,12 @@ export default {
         type: this.auction.type,
         username: this.auction.username,
         status: this.auction.status,
-        duration: this.auction.name,
+        duration: this.auction.duration,
         bidders: this.auction.bidders,
         highest_bidder: this.auction.highest_bidder
       };
       axios
-        .put("/api/auction", auction)
+        .put("/api/auction", auction, { withCredentials: true })
         .then(() => {
           location.reload();
         })
