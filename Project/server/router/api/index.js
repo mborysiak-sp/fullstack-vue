@@ -7,7 +7,7 @@ const bcrypt = require("../../bcrypt");
 const router = express.Router();
 const User = model.User;
 const Auction = model.Auction;
-const processErrors = model.processErrors;
+const processerrors = model.processerrors;
 
 const rejectMethod = (_req, res, _next) => {
   res.sendStatus(405);
@@ -28,14 +28,14 @@ router
       await user.save();
       console.log("done save");
       res.status(200).json("Registered user");
-    } catch (err) {
+    } catch (error) {
       if (!req.body.password) {
         // Unprocessable Entity
         res.status(422).json({
           password: "Password must not be empty!"
         });
-      } else if (err !== undefined) {
-        res.status(422).json(processErrors(err));
+      } else if (error !== undefined) {
+        res.status(422).json(processerrors(error));
       }
     }
   })
@@ -90,9 +90,9 @@ router
 router
   .route("/auction")
   .post((req, res) => {
-    Auction.findOne({ _id: req.body.index }, (err, doc) => {
-      if (err) {
-        res.json(err);
+    Auction.findOne({ _id: req.body.index }, (error, doc) => {
+      if (error) {
+        res.json(error);
       } else {
         res.json({ auction: doc });
       }
@@ -102,13 +102,11 @@ router
 
 router.route("/auctions")
   .get((req, res) => {
-    Auction.find(
-      { status: "ONGOING" }
-    ).limit(10)
-      .sort({ bidders: -1 })
-      .exec((err, docs) => {
-        if (err) {
-          res.json(err);
+    Auction.find().limit(10)
+      // .sort({ bidders: -1 })
+      .exec((error, docs) => {
+        if (error) {
+          res.json(error);
         } else {
           res.json(docs);
         }
@@ -118,9 +116,9 @@ router.route("/auctions")
 router
   .route("/buy")
   .post((req, res) => {
-    Auction.findOne({ _id: req.body.index }, (err, doc) => {
-      if (err) {
-        res.json(err);
+    Auction.findOne({ _id: req.body.index }, (error, doc) => {
+      if (error) {
+        res.json(error);
       } else {
         doc.highest_bidder = req.user.username;
         doc.status = "SOLD";
@@ -133,27 +131,11 @@ router
 router
   .route("/start")
   .post((req, res) => {
-    Auction.findOne({ _id: req.body.index }, (err, doc) => {
-      if (err) {
-        res.json(err);
+    Auction.findOne({ _id: req.body.index }, (error, doc) => {
+      if (error) {
+        res.json(error);
       } else {
         doc.status = "ONGOING";
-        doc.save();
-      }
-    });
-  })
-  .all(rejectMethod);
-
-router
-  .route("/edit")
-  .post((req, res) => {
-    Auction.findOne({ _id: req.body._id }, (err, doc) => {
-      if (err) {
-        res.json(err);
-      } else {
-        doc.name = req.body.name;
-        doc.price = req.body.price;
-        doc.type = req.body.type;
         doc.save();
       }
     });
@@ -168,14 +150,14 @@ router
   .all(rejectMethod);
 
 router
-  .route("/create")
+  .route("/auction")
   .get((req, res) => {
     if (req.isAuthenticated()) {
-      Auction.find({}, (err, doc) => {
-        if (err) {
-          res.json(err);
+      Auction.find({}, (error, doc) => {
+        if (error) {
+          res.status(500).json(error);
         } else {
-          res.json(doc);
+          res.status(201).json(doc);
         }
       });
     } else {
@@ -195,12 +177,23 @@ router
       try {
         auction.save();
         res.status(201).json({ msg: "Auction saved" });
-      } catch (err) {
-        res.status(500).json({ msg: err });
+      } catch (error) {
+        res.status(500).json({ msg: error });
       }
       // res.redirect("/auction/myauctions");
     } else {
       res.status(401).json({ msg: "Must be authenticated" });
+    }
+  })
+  .put((req, res) => {
+    if (req.isAuthenticated() && req.user.username === req.body.username) {
+      Auction.updateOne({ _id: req.body._id }, req.body, (error, doc) => {
+        if (error) {
+          res.status(500).json({ msg: error });
+        } else {
+          res.status(201).json(doc);
+        }
+      });
     }
   })
   .all(rejectMethod);
@@ -210,13 +203,14 @@ router
   .get((req, res) => {
     if (req.isAuthenticated()) {
       Auction.find({
-        $or: [{ username: req.user.username, status: "NEW" },
-          { username: req.user.username, status: "ONGOING" }]
-      }, (err, doc) => {
-        if (err) {
-          res.json(err);
+        // $or: [{ username: req.user.username, status: "NEW" },
+        //   { username: req.user.username, status: "ONGOING" }]
+        username: req.user.username
+      }, (error, doc) => {
+        if (error) {
+          res.status(500).json(error);
         } else {
-          res.json(doc);
+          res.status(201).json(doc);
         }
       });
     } else {
@@ -232,9 +226,9 @@ router
       Auction.find({
         $or: [{ username: req.user.username, status: "SOLD" },
           { bidders: req.user.username, status: "SOLD" }]
-      }, (err, doc) => {
-        if (err) {
-          res.json(err);
+      }, (error, doc) => {
+        if (error) {
+          res.json(error);
         } else {
           res.json(doc);
         }

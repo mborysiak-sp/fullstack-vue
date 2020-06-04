@@ -41,7 +41,7 @@ export default {
         duration: this.name
       };
       await axios.post(
-        "/api/create",
+        "/api/auction",
         auction,
         { withCredentials: true }
       )

@@ -1,24 +1,24 @@
 <template>
   <div class="auctions">
     <div v-for="auction in auctions" :key="auction._id">
-      <div class="auction" @click="navigateTo(auction)">
-        <div class="auction-name">
-          <p>{{auction.name}}</p>
-          <p>{{auction.username}}</p>
-        </div>
-      </div>
+      <Auction :auction="auction" />
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Auction from "./Auction";
 
 export default {
+  name: "Auctions",
   data () {
     return {
       auctions: null
     };
+  },
+  components: {
+    Auction
   },
   created () {
     axios.get("/api/auctions", { withCredentials: true })
