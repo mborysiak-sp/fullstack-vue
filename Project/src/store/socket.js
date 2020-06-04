@@ -5,12 +5,13 @@ const state = {
 };
 
 const getters = {
-  socket: state.socket
+  socket: state => state.socket
 };
 
 const actions = {
   setSocket ({ commit }) {
-    commit("set_socket", io());
+    const s = io();
+    commit("set_socket", s);
   }
 };
 

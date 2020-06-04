@@ -54,13 +54,13 @@ io.use(passportSocketIo.authorize({
 }));
 
 const isAuthenticated = (socket) => {
-  return socket.request.session.isAuthenticated;
+  return socket.request.isAuthenticated;
 };
 
 io.on("connection", (socket) => {
   console.log(`new connection ${socket.id}`);
 
-  const username = socket.request.session.user.username;
+  const username = socket.request.user.username;
 
   socket.on("join", (cb) => {
     // if (isAuthenticated(socket)) {

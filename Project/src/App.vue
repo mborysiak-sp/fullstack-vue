@@ -14,10 +14,11 @@ export default {
     Navbar
   },
   methods: {
-    ...mapActions(["setUser"])
+    ...mapActions(["setUser", "setSocket"])
   },
   created () {
     this.setUser();
+    this.setSocket();
   }
 };
 </script>

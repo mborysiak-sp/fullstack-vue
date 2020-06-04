@@ -79,6 +79,13 @@ export default {
           this.logError(error);
         });
     },
+    // buy () {
+    //   this.socket.emit("buy", {
+    //     id: this.auction._id,
+    //     highestBidder: this.user.username,
+    //     price: this.price
+    //   })
+    // },
     bid () {
       if (this.price <= this.auction.price) {
         console.log("Pay more plz");
