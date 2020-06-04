@@ -1,21 +1,23 @@
 <template>
   <div class="auction-info">
+    Name: {{ auction.name }}
+    User: {{ auction.username }}
     <div v-if="auction.type === 'BID'">
       <div v-if="auction.status === 'ONGOING'">
-          Price: ${{ auction.price }}
+          Price: {{ auction.price }}
           Highest bidder: {{ auction.highest_bidder }}
         <div v-if="isValidBidder">
-          <button @click="bid()" value="Bid" />
+          <button @click="bid()">Bid</button>
           <input v-model="price" type="number" min="1" step="1" placeholder="Your bid" size="9" >
         </div>
       </div>
       <div v-else-if="auction.status === 'SOLD'">
-        Bought for: ${{ auction.price }}
-        Successful bidder: ${{ auction.highest_bidder }}
+        Bought for: {{ auction.price }}
+        Successful bidder: {{ auction.highest_bidder }}
       </div>
       <div v-else-if="auction.status === 'NEW' && auction.user === user.username">
         Minimum price: ${{ auction.price }}
-        <button @click="start()" value="Start" />
+        <button @click="start()">Start</button>
       </div>
     </div>
     <div v-else>
@@ -23,7 +25,7 @@
           Price: ${{ auction.price }}
           Highest bidder: {{ auction.highest_bidder }}
         <div v-if="isValidBidder">
-          <button @click="bid()" value="Buy"/>
+          <button @click="bid()">Buy</button>
           <input v-model="price" type="number" min="1" step="1" placeholder="Your bid" size="9" >
         </div>
       </div>
@@ -33,7 +35,7 @@
       </div>
       <div v-else-if="auction.status === 'NEW' && user.username === auction.username">
         Price: ${{ auction.price }}
-        <button @click="start()" value="Start" />
+        <button @click="start()">Start auction</button>
       </div>
     </div>
   </div>
@@ -46,7 +48,7 @@ import axios from "axios";
 export default {
   name: "AuctionInfo",
   computed: {
-    ...mapGetters(["user", "isAuthenticated"]),
+    ...mapGetters(["user", "isAuthenticated", "socket"]),
     isValidBidder: function () {
       return this.user.username !== this.auction.username && this.isAuthenticated;
     }
@@ -57,6 +59,11 @@ export default {
       id: this.auction._id,
       price: ""
     };
+  },
+  sockets: {
+    connect () {
+      this.isConnected = true;
+    }
   },
   methods: {
     ...mapActions(["logError"]),
@@ -76,8 +83,11 @@ export default {
       if (this.price <= this.auction.price) {
         console.log("Pay more plz");
       } else {
-        // to do
-        console.log("Biddedeed");
+        this.socket.emit("new", {
+          id: this.auction._id,
+          highestBidder: this.user.username,
+          price: this.price
+        });
       }
     }
   }
