@@ -1,11 +1,11 @@
 import io from "socket.io-client";
 
 const state = {
-  socket: {}
+  socket: []
 };
 
 const getters = {
-  socket: state => state.socket
+  socket: state => state.socket[]
 };
 
 const actions = {

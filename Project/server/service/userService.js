@@ -1,7 +1,6 @@
 const model = require("../model");
 const User = model.User;
 const bcrypt = require("../bcrypt");
-const passport = require("../passport");
 
 const processErrors = model.processErrors;
 

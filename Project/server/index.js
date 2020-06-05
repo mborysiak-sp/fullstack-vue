@@ -1,8 +1,6 @@
 // Configuration file
 require("dotenv").config();
 
-const Auction = require("./model").Auction;
-
 // Server initialization
 const express = require("express");
 const app = express();
@@ -19,6 +17,7 @@ app.use(bodyParser.urlencoded({
 
 // Services config
 const auctionService = require("./service/auctionService");
+const chatService = require("./service/chatService");
 
 // Session config
 const session = require("express-session");
@@ -47,9 +46,6 @@ const socketio = require("socket.io");
 const io = socketio(server);
 const passportSocketIo = require("passport.socketio");
 
-// const model = require("./model");
-// const Auction = model.Auction;
-
 io.use(passportSocketIo.authorize({
   key: "connect.sid",
   secret: process.env.APP_SECRET,
@@ -68,17 +64,16 @@ io.on("connection", (socket) => {
   const username = socket.request.user.username;
 
   socket.on("join", (cb) => {
-    // if (isAuthenticated(socket)) {
-    console.log(`${username} joined ${cb._id}`);
-    socket.join(cb._id);
-    // }
+    if (isAuthenticated(socket)) {
+      console.log(`${username} joined ${cb._id}`);
+      socket.join(cb._id);
+    }
   });
 
   socket.on("start", (cb) => {
-    // if (isAuthenticated(socket)) {
     console.log(`started ${cb._id}`);
-    // }
   });
+
   socket.on("new_buy", async (cb) => {
     if (isAuthenticated(socket)) {
       const body = {
@@ -89,8 +84,9 @@ io.on("connection", (socket) => {
         }
       };
 
-      auctionService.partialUpdate(body, (error) => {
-        console.dir(body);
+      await auctionService.partialUpdate(body, (error) => {
+        // console.dir(body);
+        console.dir(cb);
         if (error) {
           io.sockets.in(cb._id).emit("error");
         } else {
@@ -105,9 +101,8 @@ io.on("connection", (socket) => {
     if (isAuthenticated(socket)) {
       let bidders = {};
       let price = "";
-      const _id = cb._id;
       try {
-        const doc = await Auction.findById(_id);
+        const doc = await auctionService.findOneBackend({ _id: cb._id });
         bidders = doc.bidders;
         price = doc.price;
       } catch (error) {
@@ -130,7 +125,7 @@ io.on("connection", (socket) => {
         };
 
         auctionService.partialUpdate(body, (error) => {
-          console.dir(body);
+          console.dir(cb);
           if (error) {
             io.sockets.in(cb._id).emit("error");
           } else {
@@ -145,6 +140,41 @@ io.on("connection", (socket) => {
   socket.on("leave", (cb) => {
     console.log(`${username} left ${cb._id}`);
     socket.leave(cb._id);
+  });
+
+  socket.on("seen", async (cb) => {
+    if (isAuthenticated) {
+      console.log(`${username} updating seen messages`);
+      try {
+        const doc = await chatService.findOneBackend({ _id: cb._id });
+        const checkIfNotSeen = (message) => {
+          return message.seen !== true && this.user.username !== message.username;
+        };
+
+        const messages = doc.messages;
+        for (const message of messages) {
+          if (checkIfNotSeen(message) === true) {
+            message.seen = true;
+          }
+        }
+        const body = {
+          _id: cb._id,
+          $set: { messages: messages }
+        };
+
+        chatService.partialUpdate(body, (error) => {
+          console.dir(body);
+          if (error) {
+            io.sockets.in(cb._id).emit("error");
+          } else {
+            io.sockets.in(cb._id).emit("new_bid", cb);
+            console.log(`Updated unseen messages for: ${cb.username}`);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
   });
 });
 

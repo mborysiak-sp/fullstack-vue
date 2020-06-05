@@ -4,7 +4,9 @@ const express = require("express");
 const router = express.Router();
 const userService = require("../../service/userService");
 const auctionService = require("../../service/auctionService");
+const chatService = require("../../service/chatService");
 const passport = require("../../passport");
+
 const rejectMethod = (_req, res, _next) => {
   res.sendStatus(405);
 };
@@ -41,53 +43,27 @@ router.route("/start")
   .patch(auctionService.start)
   .all(rejectMethod);
 
-// router.route("/buy")
-//   .post((req, res) => {
-//     Auction.findOne({ _id: req.body.index }, (error, doc) => {
-//       if (error) {
-//         res.json(error);
-//       } else {
-//         doc.highest_bidder = req.user.username;
-//         doc.status = "SOLD";
-//         doc.save();
-//       }
-//     });
-//   })
-//   .all(rejectMethod);
-
-// router.route("/start")
-//   .post((req, res) => {
-//     Auction.findOne({ _id: req.body.index }, (error, doc) => {
-//       if (error) {
-//         res.json(error);
-//       } else {
-//         doc.status = "ONGOING";
-//         doc.save();
-//       }
-//     });
-//   })
-//   .all(rejectMethod);
-
-// router.route("/")
-//   .get((req, res) => {
-//     if (req.isAuthenticated()) { res.send("Home page"); } else { res.redirect("/login"); }
-//   })
-//   .all(rejectMethod);
-
 router.route("/auction")
-  // .get(isLoggedIn, auctionService.singeAuction)
+  // .get(isLoggedIn, auctionService.singleAuction)
   .post(isLoggedIn, auctionService.create)
   .put(isLoggedIn, auctionService.update)
   .all(rejectMethod);
 
-router
-  .route("/user_auctions")
+router.route("/user_auctions")
   .get(isLoggedIn, auctionService.userAuctions)
   .all(rejectMethod);
 
-router
-  .route("/user_history")
+router.route("/user_history")
   .get(isLoggedIn, auctionService.userHistory)
+  .all(rejectMethod);
+
+router.route("chat")
+  .get(isLoggedIn, chatService.findOne)
+  .post(isLoggedIn, chatService.create)
+  .all(rejectMethod);
+
+router.route("chats")
+  .get(isLoggedIn, chatService.list)
   .all(rejectMethod);
 
 module.exports = router;
