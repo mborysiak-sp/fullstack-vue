@@ -39,12 +39,33 @@ const auctionSchema = new Schema({
     type: Number
   },
   price: {
-    type: Number
+    type: Number,
+    required: true
   },
   bidders: [{ type: String }],
   highest_bidder: {
     type: String
   }
+});
+
+const messageSchema = new Schema({
+  username: {
+    type: String,
+    required: true
+  },
+  text: {
+    type: String,
+    required: true
+  },
+  seen: Boolean
+});
+
+const chatSchema = new Schema({
+  users: [{
+    type: String,
+    size: 2
+  }],
+  messages: [messageSchema]
 });
 
 const uniqueValidator = require("mongoose-unique-validator");
@@ -57,6 +78,8 @@ userSchema.methods.isValidPassword = function (password) {
 
 const User = mongoose.model("User", userSchema);
 const Auction = mongoose.model("Auction", auctionSchema);
+const Chat = mongoose.model("Chat", chatSchema);
+const Message = mongoose.model("Message", messageSchema);
 
 const processErrors = (err) => {
   const msg = {};
@@ -66,4 +89,4 @@ const processErrors = (err) => {
   return msg;
 };
 
-module.exports = { User, processErrors, Auction };
+module.exports = { User, processErrors, Auction, Chat, Message };
