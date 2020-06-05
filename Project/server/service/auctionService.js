@@ -24,7 +24,7 @@ module.exports.singleAuction = (req, res) => {
   });
 };
 
-module.exports.create = (req, res) => {
+module.exports.create = async (req, res) => {
   const auction = new Auction({
     username: req.user.username,
     status: req.body.status,
@@ -36,26 +36,45 @@ module.exports.create = (req, res) => {
     highest_bidder: ""
   });
   try {
-    auction.save();
+    await auction.save();
     res.status(201).json({ msg: "Auction saved" });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
 };
 
+module.exports.findById = (req, res) => {
+  Auction.findById(req._id,
+    (error, doc) => {
+      if (error) {
+        res.status(404).json({ msg: error });
+      } else {
+        res.status(201).json(doc);
+      }
+    });
+};
+
 module.exports.update = (req, res) => {
-  if (req.user.username === req.body.username) {
-    console.dir(req.body);
-    Auction.updateOne({ _id: req.body._id }, req.body, (error, doc) => {
+  Auction.updateOne({ _id: req.body._id }, req.body,
+    (error, doc) => {
       if (error) {
         res.status(500).json({ msg: error });
       } else {
         res.status(201).json(doc);
       }
     });
-  }
 };
 
+module.exports.partialUpdate = async (req, next) => {
+  try {
+    await Auction.updateOne({ _id: req._id }, req.$set);
+    console.log("Updated partially");
+    return next();
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+};
 module.exports.userAuctions = (req, res) => {
   Auction.find({
     // $or: [{ username: req.user.username, status: "NEW" },
@@ -79,6 +98,17 @@ module.exports.userHistory = (req, res) => {
       res.json(error);
     } else {
       res.json(doc);
+    }
+  });
+};
+
+module.exports.start = (req, res) => {
+  console.dir(req.body);
+  Auction.updateOne({ _id: req.body._id }, { $set: { status: "ONGOING" } }, (error, doc) => {
+    if (error) {
+      res.status(500).json({ msg: error });
+    } else {
+      res.status(201).json(doc);
     }
   });
 };

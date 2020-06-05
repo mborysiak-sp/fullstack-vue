@@ -29,9 +29,9 @@ module.exports.register = async (req, res) => {
   }
 };
 
-module.exports.login = (passport.authenticate("local"), async (req, res) => {
+module.exports.login = async (req, res) => {
   res.status(200).send({ isAuthenticated: true, user: req.user });
-});
+};
 
 module.exports.currentUser = (req, res) => {
   if (req.isAuthenticated()) {

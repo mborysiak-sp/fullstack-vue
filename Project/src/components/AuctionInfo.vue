@@ -1,5 +1,6 @@
 <template>
   <div class="auction-info">
+    <br>
     Name: {{ auction.name }}
     User: {{ auction.username }}
     <div v-if="auction.type === 'BID'">
@@ -15,29 +16,24 @@
         Bought for: {{ auction.price }}
         Successful bidder: {{ auction.highest_bidder }}
       </div>
-      <div v-else-if="auction.status === 'NEW' && auction.user === user.username">
-        Minimum price: ${{ auction.price }}
-        <button @click="start()">Start</button>
-      </div>
     </div>
-    <div v-else>
+    <div v-else-if="auction.type === 'BUY'">
       <div v-if="auction.status === 'ONGOING'">
           Price: ${{ auction.price }}
-          Highest bidder: {{ auction.highest_bidder }}
         <div v-if="isValidBidder">
-          <button @click="bid()">Buy</button>
-          <input v-model="price" type="number" min="1" step="1" placeholder="Your bid" size="9" >
+          <button @click="buy()">Buy</button>
         </div>
       </div>
       <div v-else-if="auction.status === 'SOLD'">
         Bought for: ${{ auction.price }}
         Buyer: ${{ auction.highest_bidder }}
       </div>
-      <div v-else-if="auction.status === 'NEW' && user.username === auction.username">
-        Price: ${{ auction.price }}
-        <button @click="start()">Start auction</button>
-      </div>
     </div>
+    <div v-if="isValidStarter">
+      Starting price: ${{ auction.price }}
+      <button @click="start()">Start</button>
+    </div>
+    <br>
   </div>
 </template>
 
@@ -48,22 +44,20 @@ import axios from "axios";
 export default {
   name: "AuctionInfo",
   computed: {
-    ...mapGetters(["user", "isAuthenticated", "socket"]),
+    ...mapGetters(["user", "isAuthenticated"]),
     isValidBidder: function () {
       return this.user.username !== this.auction.username && this.isAuthenticated;
+    },
+    isValidStarter: function () {
+      return this.user.username === this.auction.username && this.isAuthenticated && this.auction.status === "NEW";
     }
   },
-  props: ["auction"],
+  props: ["auction", "socket"],
   data () {
     return {
       id: this.auction._id,
       price: ""
     };
-  },
-  sockets: {
-    connect () {
-      this.isConnected = true;
-    }
   },
   methods: {
     ...mapActions(["logError"]),
@@ -71,7 +65,7 @@ export default {
       axios
         .patch(
           "/api/start",
-          { index: this.auction._id }, { withCredentials: true })
+          { _id: this.auction._id }, { withCredentials: true })
         .then(() => {
           location.reload();
         })
@@ -79,20 +73,20 @@ export default {
           this.logError(error);
         });
     },
-    // buy () {
-    //   this.socket.emit("buy", {
-    //     id: this.auction._id,
-    //     highestBidder: this.user.username,
-    //     price: this.price
-    //   })
-    // },
+    buy () {
+      this.socket.emit("new_buy", {
+        _id: this.auction._id,
+        highest_bidder: this.user.username,
+        status: "SOLD"
+      });
+    },
     bid () {
       if (this.price <= this.auction.price) {
         console.log("Pay more plz");
       } else {
-        this.socket.emit("new", {
-          id: this.auction._id,
-          highestBidder: this.user.username,
+        this.socket.emit("new_bid", {
+          _id: this.auction._id,
+          highest_bidder: this.user.username,
           price: this.price
         });
       }

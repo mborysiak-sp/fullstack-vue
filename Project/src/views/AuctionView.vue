@@ -1,6 +1,6 @@
 <template>
   <div class="auction-view">
-    <Auction :isLoading="true" />
+    <Auction />
   </div>
 </template>
 

@@ -38,7 +38,7 @@ export default {
         type: this.type,
         username: this.$store.getters.user.username,
         status: "NEW",
-        duration: this.name
+        duration: this.duration
       };
       await axios.post(
         "/api/auction",

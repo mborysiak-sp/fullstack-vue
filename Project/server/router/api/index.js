@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const userService = require("../../service/userService");
 const auctionService = require("../../service/auctionService");
-
+const passport = require("../../passport");
 const rejectMethod = (_req, res, _next) => {
   res.sendStatus(405);
 };
@@ -26,7 +26,7 @@ router.route("/user_status")
   .all(rejectMethod);
 
 router.route("/login")
-  .post(userService.login)
+  .post(passport.authenticate("local"), userService.login)
   .all(rejectMethod);
 
 router.route("/logout")
@@ -34,7 +34,12 @@ router.route("/logout")
   .all(rejectMethod);
 
 router.route("/auctions")
-  .get(auctionService.list);
+  .get(auctionService.list)
+  .all(rejectMethod);
+
+router.route("/start")
+  .patch(auctionService.start)
+  .all(rejectMethod);
 
 // router.route("/buy")
 //   .post((req, res) => {
