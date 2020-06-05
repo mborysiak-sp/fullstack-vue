@@ -20,10 +20,11 @@ export default {
   data () {
     return {
       emitter: io(),
-      chat: null,
-      text: ""
+      text: "",
+      chat: this.inheritedChat
     };
   },
+  props: ["inheritedChat"],
   methods: {
     send () {
       if (this.messageInput === "") {
@@ -34,7 +35,8 @@ export default {
           username: this.user.username,
           text: this.text
         };
-        this.emitter.send(body);
+        console.log("EMITUJE MESAGE");
+        this.emitter.emit("new_message", body);
       }
     }
   },

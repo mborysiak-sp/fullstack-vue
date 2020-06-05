@@ -23,6 +23,23 @@ module.exports.findOne = (req, res) => {
   });
 };
 
+module.exports.findOneByUsers = (req, res) => {
+  // console.dir(req);
+  Chat.findOne({
+    $or: [
+      { users: [req.body.users[0], req.body.users[1]] },
+      { users: [req.body.users[1], req.body.users[0]] }
+    ]
+  }, (error, doc) => {
+    if (error) {
+      res.status(500).json(processErrors(error));
+    } else {
+      console.dir(doc);
+      res.status(201).json(doc);
+    }
+  });
+};
+
 module.exports.findOneBackend = async (req, next) => {
   try {
     const doc = await Chat.findOne({ _id: req._id });
@@ -45,11 +62,11 @@ module.exports.partialUpdate = async (req, next) => {
 };
 
 module.exports.create = async (req, res) => {
+  console.dir(req.body.users);
   const chat = new Chat({
     messages: [],
-    users: []
+    users: req.body.users
   });
-  chat.users = [req.username, req.targetUser];
   try {
     const doc = await chat.save();
     res.status(201).json(doc);

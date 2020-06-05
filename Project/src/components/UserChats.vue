@@ -1,11 +1,13 @@
 <template>
-  <div class="user-chats">
-    <div v-for="chat in chats" :key="chat._id">
-      <div v-on:click="openChat(chat)">
-          {{ otherUser(chat) }}
+  <div class="user-chats" v-if="chats !== null">
+    <div v-for="chatEl in chats" :key="chatEl._id">
+      <div v-if="chatEl !== null" v-on:click="openChat(chatEl)">
+          {{ otherUser(chatEl) }}
       </div>
     </div>
-    <Chat :chat="chat" />
+    <div v-if="chat !== null">
+      <Chat :inheritedChat="chat" />
+    </div>
   </div>
 </template>
 
@@ -17,18 +19,19 @@ import Chat from "@/components/Chat.vue";
 export default {
   name: "UserChats",
   computed: {
-    ...mapGetters(["user"]),
-    otherUser (chat) {
-      return chat.users.find(user => user !== this.user.username);
-    }
+    ...mapGetters(["user"])
   },
   data () {
     return {
-      chats: {},
-      chat: {}
+      chats: null,
+      chat: null
     };
   },
   created () {
+    if (this.$route.params.chat !== null && this.$route.params.chat !== undefined) {
+      this.chat = this.$route.params.chat;
+    }
+
     axios.get("/api/chats")
       .then((resp) => {
         this.chats = resp.data;
@@ -39,9 +42,11 @@ export default {
   },
   components: { Chat },
   methods: {
+    otherUser (chat) {
+      return chat.users.find(user => user !== this.user.username);
+    },
     openChat (chat) {
       this.chat = chat;
-      location.reload();
     }
   }
 };

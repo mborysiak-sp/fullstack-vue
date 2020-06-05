@@ -5,6 +5,9 @@
       <div v-if="editable === true">
         <button @click="edit()">Edit</button>
       </div>
+      <div v-if="this.user.username !== auction.username ">
+        <button @click="chat()">Chat</button>
+      </div>
     </div>
     <div v-else-if="editMode === true">
       <AuctionEditForm :inheritedAuction="auction" />
@@ -15,6 +18,8 @@
 <script>
 import { mapGetters } from "vuex";
 import AuctionInfo from "./AuctionInfo";
+import axios from "axios";
+import router from "../router/index";
 import AuctionEditForm from "./AuctionEditForm";
 import io from "socket.io-client";
 
@@ -40,6 +45,31 @@ export default {
   methods: {
     edit () {
       this.editMode = !this.editMode;
+    },
+    chat () {
+      const users = [this.auction.username, this.user.username];
+
+      let result = {};
+
+      axios.post("/api/exists", { users: users })
+        .then((cb) => {
+          if (cb.data === null) {
+            axios.post("/api/chat", { users: users })
+              .then((cb) => {
+                result = cb.data;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else {
+            result = cb.data;
+          }
+          console.dir(result);
+          router.push({ name: "UserChatsView", params: { chat: result } });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   },
   beforeDestroy () {
@@ -71,15 +101,15 @@ export default {
       this.auction.highest_bidder = cb.highest_bidder;
     });
 
-    window.onbeforeunload = () => {
-      if (this.isAuthenticated && this.auction.type === "BID" && this.auction.status === "ONGOING") {
-        this.emitter.emit("leave", {
-          _id: this.auction._id,
-          username: this.user.username
-        });
-        console.log("left");
-      };
-    };
+    // window.onbeforeunload = () => {
+    //   if (this.isAuthenticated && this.auction.type === "BID" && this.auction.status === "ONGOING") {
+    //     this.emitter.emit("leave", {
+    //       _id: this.auction._id,
+    //       username: this.user.username
+    //     });
+    //     console.log("left");
+    //   };
+    // };
   }
 };
 </script>
