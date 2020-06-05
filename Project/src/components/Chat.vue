@@ -10,7 +10,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Socket from "./../socket/index";
+import io from "socket.io-client";
 
 export default {
   name: "Chat",
@@ -19,7 +19,7 @@ export default {
   },
   data () {
     return {
-      emitter: new Socket(),
+      emitter: io(),
       chat: null,
       text: ""
     };
@@ -40,7 +40,7 @@ export default {
   },
   created () {
     if (this.isAuthenticated) {
-      this.emitter.join({ _id: this.chat._id, username: this.user.username });
+      this.emitter.emit("join", { _id: this.chat._id, username: this.user.username });
     }
 
     this.emitter.on("new_message", (cb) => {
@@ -49,7 +49,7 @@ export default {
 
     window.onbeforeunload = () => {
       if (this.isAuthenticated) {
-        this.emitter.leave({ _id: this.chat._id, username: this.user.username });
+        this.emitter.emit("leave", { _id: this.chat._id, username: this.user.username });
       }
     };
 
@@ -59,7 +59,7 @@ export default {
 
     for (const message of this.chat.messages) {
       if (checkIfNotSeen(message) === true) {
-        this.emitter.seen({ _id: this.chat._id, username: this.user.username });
+        this.emitter.emit("seen", { _id: this.chat._id, username: this.user.username });
         break;
       }
     }

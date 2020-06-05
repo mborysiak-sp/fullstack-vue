@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import Register from "../views/Register.vue";
 import UserPanel from "../views/UserPanel.vue";
 import Auction from "../components/Auction.vue";
+import UserChatsView from "../views/UserChatsView.vue";
 import store from "../store/store";
 
 Vue.use(VueRouter);
@@ -29,6 +30,12 @@ const routes = [
     path: "/auction/id:(\\w+)",
     name: "Auction",
     component: Auction
+  },
+  {
+    path: "/userChatsView",
+    name: "UserChatsView",
+    component: UserChatsView,
+    meta: { requiresLogin: true }
   }
 ];
 

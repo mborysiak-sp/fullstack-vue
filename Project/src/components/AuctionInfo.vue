@@ -52,7 +52,7 @@ export default {
       return this.user.username === this.auction.username && this.isAuthenticated && this.auction.status === "NEW";
     }
   },
-  props: ["auction", "socket"],
+  props: ["auction", "emitter"],
   data () {
     return {
       id: this.auction._id,
@@ -74,7 +74,7 @@ export default {
         });
     },
     buy () {
-      this.socket.emit("new_buy", {
+      this.emitter.emit("new_buy", {
         _id: this.auction._id,
         highest_bidder: this.user.username,
         status: "SOLD"
@@ -84,7 +84,7 @@ export default {
       if (this.price <= this.auction.price) {
         console.log("Pay more plz");
       } else {
-        this.socket.emit("new_bid", {
+        this.emitter.emit("new_bid", {
           _id: this.auction._id,
           highest_bidder: this.user.username,
           price: this.price

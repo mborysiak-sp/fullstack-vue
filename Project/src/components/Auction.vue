@@ -1,7 +1,7 @@
 <template>
   <div class="auction" v-if="auction !== null">
     <div v-if="editMode === false">
-      <AuctionInfo :auction="auction"  :socket="this.socket"/>
+      <AuctionInfo :auction="auction" :emitter="emitter" />
       <div v-if="editable === true">
         <button @click="edit()">Edit</button>
       </div>
@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       editMode: false,
-      socket: io()
+      emitter: io()
     };
   },
   computed: {
@@ -44,7 +44,7 @@ export default {
   },
   beforeDestroy () {
     if (this.isAuthenticated && this.auction.type === "BID" && this.auction.status === "ONGOING") {
-      this.socket.emit("leave", {
+      this.emitter.emit("leave", {
         id: this.auction._id,
         username: this.user.username
       });
@@ -53,19 +53,19 @@ export default {
   },
   created () {
     if (this.isAuthenticated && this.auction.type === "BID" && this.auction.status === "ONGOING") {
-      this.socket.emit("join", {
+      this.emitter.emit("join", {
         _id: this.auction._id,
         username: this.user.username
       });
     }
 
-    this.socket.on("new_buy", (cb) => {
+    this.emitter.on("new_buy", (cb) => {
       console.log("new bid");
       this.auction.status = "SOLD";
       this.auction.highest_bidder = cb.highest_bidder;
     });
 
-    this.socket.on("new_bid", (cb) => {
+    this.emitter.on("new_bid", (cb) => {
       console.log("new bid");
       this.auction.price = cb.price;
       this.auction.highest_bidder = cb.highest_bidder;
@@ -73,7 +73,7 @@ export default {
 
     window.onbeforeunload = () => {
       if (this.isAuthenticated && this.auction.type === "BID" && this.auction.status === "ONGOING") {
-        this.socket.emit("leave", {
+        this.emitter.emit("leave", {
           _id: this.auction._id,
           username: this.user.username
         });
