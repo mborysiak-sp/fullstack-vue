@@ -13,6 +13,17 @@ module.exports.list = (req, res) => {
   });
 };
 
+module.exports.listBetween = (req, res) => {
+  Auction.find({ status: "ONGOING" })
+    .skip(req.body.from).limit(req.body.limit).exec((error, docs) => {
+      if (error) {
+        res.json(processErrors(error));
+      } else {
+        res.json(docs);
+      }
+    });
+};
+
 module.exports.singleAuction = (req, res) => {
   Auction.find({}, (error, doc) => {
     if (error) {
@@ -30,7 +41,8 @@ module.exports.create = async (req, res) => {
     type: req.body.type,
     name: req.body.name,
     price: req.body.price,
-    duration: req.body.duration,
+    time: req.body.time,
+    description: req.body.description,
     bidders: [],
     highest_bidder: ""
   });
@@ -85,6 +97,12 @@ module.exports.partialUpdate = async (req, next) => {
     return next(error);
   }
 };
+
+// module.exports.listBetween = async (req, next) => {
+//   try {
+//     await Auction.find()
+//   }
+// }
 
 module.exports.userOwnedAuctions = (req, res) => {
   Auction.find({

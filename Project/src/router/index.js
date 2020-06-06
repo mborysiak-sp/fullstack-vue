@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Register from "../views/Register.vue";
 import UserPanel from "../views/UserPanel.vue";
-import Auction from "../components/Auction.vue";
 import UserChatsView from "../views/UserChatsView.vue";
 import store from "../store/store";
 
@@ -25,11 +24,6 @@ const routes = [
     name: "UserPanel",
     component: UserPanel,
     meta: { requiresLogin: true }
-  },
-  {
-    path: "/auction/id:(\\w+)",
-    name: "Auction",
-    component: Auction
   },
   {
     path: "/userChatsView",

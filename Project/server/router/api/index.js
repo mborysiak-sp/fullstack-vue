@@ -39,6 +39,10 @@ router.route("/auctions")
   .get(auctionService.list)
   .all(rejectMethod);
 
+router.route("/auctions_limited")
+  .post(auctionService.listBetween)
+  .all(rejectMethod);
+
 router.route("/start")
   .patch(auctionService.start)
   .all(rejectMethod);

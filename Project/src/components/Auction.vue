@@ -100,16 +100,6 @@ export default {
       this.auction.price = cb.price;
       this.auction.highest_bidder = cb.highest_bidder;
     });
-
-    // window.onbeforeunload = () => {
-    //   if (this.isAuthenticated && this.auction.type === "BID" && this.auction.status === "ONGOING") {
-    //     this.emitter.emit("leave", {
-    //       _id: this.auction._id,
-    //       username: this.user.username
-    //     });
-    //     console.log("left");
-    //   };
-    // };
   }
 };
 </script>

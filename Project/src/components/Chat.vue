@@ -48,12 +48,6 @@ export default {
       this.chat.messages.push(cb);
     });
 
-    // window.onbeforeunload = () => {
-    //   if (this.isAuthenticated) {
-    //     this.emitter.emit("leave", { _id: this.chat._id, username: this.user.username });
-    //   }
-    // };
-
     const checkIfNotSeen = (message) => {
       return message.seen !== true && this.user.username !== message.username;
     };

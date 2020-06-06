@@ -3,12 +3,13 @@
     <form>
       <input v-model="auction.name" id="name" type="text" minlength="2" placeholder="Name">
       <input v-model="auction.price" id="price" type="number" min="1" step="1" placeholder="Price">
+      <input v-model="auction.description" id="description" type="text" placeholder="Description">
       <select v-model="auction.type" id="select" name ="select">
         <option value="BID">BID</option>
         <option value="BUY">BUY</option>
       </select>
       <div v-if="auction.type === 'BID'">
-        <input type="number" v-model="auction.duration" placeholder="Duration">
+        <input type="number" v-model="auction.time" placeholder="time">
       </div>
       <input type="button" @click="put()" value="Edit">
     </form>
@@ -29,7 +30,8 @@ export default {
         username: this.inheritedAuction.username,
         name: this.inheritedAuction.name,
         price: this.inheritedAuction.price,
-        duration: this.inheritedAuction.duration,
+        time: this.inheritedAuction.time,
+        description: this.inheritedAuction.description,
         status: this.inheritedAuction.status,
         type: this.inheritedAuction.type,
         bidders: this.inheritedAuction.bidders,
@@ -47,7 +49,8 @@ export default {
         type: this.auction.type,
         username: this.auction.username,
         status: this.auction.status,
-        duration: this.auction.duration,
+        description: this.auction.description,
+        time: this.auction.time,
         bidders: this.auction.bidders,
         highest_bidder: this.auction.highest_bidder
       };

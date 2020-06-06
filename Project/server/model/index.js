@@ -35,7 +35,10 @@ const auctionSchema = new Schema({
     enum: ["BID", "BUY"],
     default: "BID"
   },
-  duration: {
+  description: {
+    type: String
+  },
+  time: {
     type: Number
   },
   price: {

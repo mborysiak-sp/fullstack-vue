@@ -3,6 +3,7 @@
     <br>
     Name: {{ auction.name }}
     User: {{ auction.username }}
+    Description: {{ auction.description }}
     <div v-if="auction.type === 'BID'">
       <div v-if="auction.status === 'ONGOING'">
           Price: {{ auction.price }}

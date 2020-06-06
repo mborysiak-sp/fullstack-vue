@@ -3,12 +3,13 @@
     <form>
       <input v-model="name" id="name" type="text" minlength="2" placeholder="Name">
       <input v-model="price" id="price" type="number" min="1" step="1" placeholder="Price">
+      <input v-model="description" id="description" type="text" placeholder="Description">
       <select v-model="type" id="select" name ="select">
         <option value="BID">BID</option>
         <option value="BUY">BUY</option>
       </select>
       <div v-if="type === 'BID'">
-        <input type="number" v-model="duration" placeholder="Duration">
+        <input type="number" v-model="time" placeholder="time">
       </div>
       <input type="button" @click="create" value="Submit">
     </form>
@@ -27,7 +28,8 @@ export default {
       type: "",
       username: this.$store.getters.user.username,
       status: "NEW",
-      duration: ""
+      description: "",
+      time: ""
     };
   },
   methods: {
@@ -37,8 +39,9 @@ export default {
         price: this.price,
         type: this.type,
         username: this.$store.getters.user.username,
+        desciption: this.description,
         status: "NEW",
-        duration: this.duration
+        time: this.time
       };
       await axios.post(
         "/api/auction",

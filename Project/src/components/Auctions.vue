@@ -3,6 +3,7 @@
     <div v-for="auction in auctions" :key="auction._id">
       <Auction :auction="auction" />
     </div>
+    <button v-if="currentAuctions != 0 && currentAuctions % 10 === 0" class="load-button" @click="loadAuctions">Load more auctions</button>
   </div>
 </template>
 
@@ -14,17 +15,29 @@ export default {
   name: "Auctions",
   data () {
     return {
-      auctions: null
+      currentAuctions: 0,
+      auctions: {}
     };
   },
   components: {
     Auction
   },
+  methods: {
+    loadAuctions () {
+      const limit = 10;
+      axios.post("/api/auctions_limited", { from: this.currentAuctions, limit: limit }, { withCredentials: true })
+        .then(resp => {
+          if (this.currentAuctions === 0) {
+            this.auctions = resp.data;
+          } else {
+            this.auctions = this.auctions.concat(resp.data);
+          }
+          this.currentAuctions = this.auctions.length;
+        });
+    }
+  },
   created () {
-    axios.get("/api/auctions", { withCredentials: true })
-      .then(resp => {
-        this.auctions = resp.data;
-      });
+    this.loadAuctions();
   }
 };
 </script>
