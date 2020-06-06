@@ -57,12 +57,16 @@ router.route("/user_history")
   .get(isLoggedIn, auctionService.userHistory)
   .all(rejectMethod);
 
-router.route("chat")
-  .get(isLoggedIn, chatService.findOne)
+router.route("/chat")
+  // .get(isLoggedIn, chatService.findOneByUsers)
   .post(isLoggedIn, chatService.create)
   .all(rejectMethod);
 
-router.route("chats")
+router.route("/exists")
+  .post(isLoggedIn, chatService.findOneByUsers)
+  .all(rejectMethod);
+
+router.route("/chats")
   .get(isLoggedIn, chatService.list)
   .all(rejectMethod);
 
