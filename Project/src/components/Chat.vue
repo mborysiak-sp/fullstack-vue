@@ -1,5 +1,6 @@
 <template>
   <div class="chat" v-if="chat !== null">
+    <b>Chatting with: {{ otherUser }}</b>
     <input id="message-text" v-model="text" type="text" placeholder="Text">
     <button @click="send()">Send</button>
     <div v-for="message in chat.messages" :key="message._id">
@@ -24,18 +25,16 @@ export default {
       chat: this.inheritedChat
     };
   },
-  props: ["inheritedChat"],
+  props: ["inheritedChat", "otherUser"],
   methods: {
     send () {
       if (this.messageInput === "") {
-        console.log("Empty message");
       } else {
         const body = {
           _id: this.chat._id,
           username: this.user.username,
           text: this.text
         };
-        console.log("EMITUJE MESAGE");
         this.emitter.emit("new_message", body);
       }
     }
@@ -49,11 +48,11 @@ export default {
       this.chat.messages.push(cb);
     });
 
-    window.onbeforeunload = () => {
-      if (this.isAuthenticated) {
-        this.emitter.emit("leave", { _id: this.chat._id, username: this.user.username });
-      }
-    };
+    // window.onbeforeunload = () => {
+    //   if (this.isAuthenticated) {
+    //     this.emitter.emit("leave", { _id: this.chat._id, username: this.user.username });
+    //   }
+    // };
 
     const checkIfNotSeen = (message) => {
       return message.seen !== true && this.user.username !== message.username;
@@ -64,6 +63,11 @@ export default {
         this.emitter.emit("seen", { _id: this.chat._id, username: this.user.username });
         break;
       }
+    }
+  },
+  beforeDestroy () {
+    if (this.isAuthenticated) {
+      this.emitter.emit("leave", { _id: this.chat._id, username: this.user.username });
     }
   }
 };

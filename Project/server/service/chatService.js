@@ -4,7 +4,7 @@ const Chat = model.Chat;
 const processErrors = model.processErrors;
 
 module.exports.list = (req, res) => {
-  Chat.find(req.username, (error, docs) => {
+  Chat.find({ users: req.user.username }, (error, docs) => {
     if (error) {
       res.status(500).json(processErrors(error));
     } else {
@@ -52,7 +52,7 @@ module.exports.findOneBackend = async (req, next) => {
 
 module.exports.partialUpdate = async (req, next) => {
   try {
-    await Chat.updateOne({ _id: req._id }, req.$set);
+    await Chat.updateOne({ _id: req.chatId }, req.$push);
     console.log("Updated partially");
     return next();
   } catch (error) {

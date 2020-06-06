@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({
 // Services config
 const auctionService = require("./service/auctionService");
 const chatService = require("./service/chatService");
+const Message = require("./model/index").Message;
 
 // Session config
 const session = require("express-session");
@@ -142,19 +143,58 @@ io.on("connection", (socket) => {
     socket.leave(cb._id);
   });
 
+  socket.on("new_message", async (cb) => {
+    if (isAuthenticated(socket)) {
+      console.dir(io.sockets.adapter.rooms);
+      console.log(cb._id);
+      const usersCount = io.sockets.adapter.rooms[cb._id].length;
+
+      const message = new Message({
+        username: cb.username,
+        text: cb.text,
+        seen: false
+      });
+
+      if (usersCount === 2) {
+        message.seen = true;
+      }
+
+      const body = {
+        chatId: cb._id,
+        $push: {
+          messages: message
+        }
+      };
+
+      await chatService.partialUpdate(body, (error) => {
+        console.dir(cb);
+        if (error) {
+          io.sockets.in(cb._id).emit("error");
+        } else {
+          io.sockets.in(cb._id).emit("new_message", cb);
+          console.log(`[Socket]: New transaction from user: ${cb.username}`);
+        }
+      });
+    }
+  });
+
   socket.on("seen", async (cb) => {
-    if (isAuthenticated) {
+    if (isAuthenticated(socket)) {
       console.log(`${username} updating seen messages`);
       try {
         const doc = await chatService.findOneBackend({ _id: cb._id });
+
+        // const otherUser = doc.users.find(username => username !== this.user.username);
+
         const checkIfNotSeen = (message) => {
-          return message.seen !== true && this.user.username !== message.username;
+          return message._doc.seen !== true && username !== message._doc.username;
         };
 
         const messages = doc.messages;
+
         for (const message of messages) {
           if (checkIfNotSeen(message) === true) {
-            message.seen = true;
+            message._doc.seen = true;
           }
         }
         const body = {
@@ -167,7 +207,7 @@ io.on("connection", (socket) => {
           if (error) {
             io.sockets.in(cb._id).emit("error");
           } else {
-            io.sockets.in(cb._id).emit("new_bid", cb);
+            io.sockets.in(cb._id).emit("seen", cb);
             console.log(`Updated unseen messages for: ${cb.username}`);
           }
         });

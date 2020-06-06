@@ -6,7 +6,7 @@
       </div>
     </div>
     <div v-if="chat !== null">
-      <Chat :inheritedChat="chat" />
+      <Chat :inheritedChat="chat" :otherUser="otherUser(chat)" />
     </div>
   </div>
 </template>
