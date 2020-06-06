@@ -14,3 +14,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.user-chats {
+  background-color:wheat;
+  height: 100%;
+}
+</style>

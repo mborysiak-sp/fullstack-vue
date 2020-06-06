@@ -64,5 +64,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.register-form {
+  form {
+    padding: 1em;
+    input {
+      margin: 5px;
+    }
+    label {
+      margin: 5px;
+    }
+  }
+}
 </style>

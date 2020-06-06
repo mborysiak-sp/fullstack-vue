@@ -1,11 +1,19 @@
 <template>
   <div class="chat" v-if="chat !== null">
-    <b>Chatting with: {{ otherUser }}</b>
-    <input id="message-text" v-model="text" type="text" placeholder="Text">
-    <button @click="send()">Send</button>
-    <div v-for="message in chat.messages" :key="message._id">
-      {{ message.username }}: {{message.text}}
+    <div class="username">
+      Chatting with: {{ otherUser }}
     </div>
+    <br>
+    <table>
+      <tr></tr>
+      <tr style="position: fixed; background-color: palegoldenrod;"><label>Type your message:</label>
+      <input id="message-text"  v-model="text" type="text" placeholder="Text" required>
+      <button @click="send()">Send</button></tr>
+      <tr></tr>
+      <div v-for="message in chat.messages" :key="message._id">
+        <tr><th>{{ message.username }}:</th><td> {{message.text}}</td></tr>
+      </div>
+    </table>
   </div>
 </template>
 
@@ -28,7 +36,7 @@ export default {
   props: ["inheritedChat", "otherUser"],
   methods: {
     send () {
-      if (this.messageInput === "") {
+      if (document.getElementById("message-text").value === "") {
       } else {
         const body = {
           _id: this.chat._id,
@@ -68,5 +76,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.chat {
+  .username {
+    font-weight: 800;
+    text-align: center;
+    position: fixed;
+    background-color: palegoldenrod;
+  }
+  table {
+    label {
+      font-weight: 700;
+    }
+    tr {
+      text-align: left;
+      th {
+      }
+      td {
+            word-break: break-all;
+      }
+    }
+  }
+}
 </style>

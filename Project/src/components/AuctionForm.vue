@@ -1,17 +1,32 @@
 <template>
   <div class="auction-form">
     <form>
-      <input v-model="name" id="name" type="text" minlength="2" placeholder="Name">
-      <input v-model="price" id="price" type="number" min="1" step="1" placeholder="Price">
-      <input v-model="description" id="description" type="text" placeholder="Description">
-      <select v-model="type" id="select" name ="select">
-        <option value="BID">BID</option>
-        <option value="BUY">BUY</option>
-      </select>
-      <div v-if="type === 'BID'">
-        <input type="number" v-model="time" placeholder="time">
+      <div class="element">
+        <label>Name:</label>
+        <input v-model="name" id="name" type="text" minlength="2" placeholder="Name">
       </div>
-      <input type="button" @click="create" value="Submit">
+      <div>
+        <label>Price:</label>
+        <input v-model="price" id="price" type="number" min="1" step="1" placeholder="Price">
+      </div>
+      <div class="element">
+        <label>Auction description:</label>
+        <input v-model="description" id="description" type="text" placeholder="Description">
+      </div>
+      <div class="element">
+        <label>Type:</label>
+        <select v-model="type" id="select" name ="select">
+          <option value="BID">BID</option>
+          <option value="BUY">BUY</option>
+        </select>
+      </div>
+      <div class="element" v-if="type === 'BID'">
+        <label>Ending date:</label>
+        <input type="date" v-model="date" placeholder="date">
+      </div>
+      <div class="element">
+        <input type="button" @click="create()" value="Submit">
+      </div>
     </form>
   </div>
 </template>
@@ -29,7 +44,7 @@ export default {
       username: this.$store.getters.user.username,
       status: "NEW",
       description: "",
-      time: ""
+      date: ""
     };
   },
   methods: {
@@ -39,9 +54,9 @@ export default {
         price: this.price,
         type: this.type,
         username: this.$store.getters.user.username,
-        desciption: this.description,
+        description: this.description,
         status: "NEW",
-        time: this.time
+        date: this.date
       };
       await axios.post(
         "/api/auction",
@@ -49,16 +64,23 @@ export default {
         { withCredentials: true }
       )
         .then(() => {
-          console.log("Udało się");
+          location.reload();
         })
         .catch((err) => {
-          console.log(err);
+          alert(err);
         });
     }
   }
 };
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.auction-form {
+  form {
+    padding-top: 5px;
+    .element {
+      float: left;
+    }
+  }
+}
 </style>

@@ -59,6 +59,8 @@ const isAuthenticated = (socket) => {
   return socket.request.isAuthenticated;
 };
 
+let lock = false;
+
 io.on("connection", (socket) => {
   console.log(`new connection ${socket.id}`);
 
@@ -76,7 +78,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new_buy", async (cb) => {
-    if (isAuthenticated(socket)) {
+    if (isAuthenticated(socket) && lock === false) {
+      lock = true;
       const body = {
         _id: cb._id,
         $set: {
@@ -86,7 +89,7 @@ io.on("connection", (socket) => {
       };
 
       await auctionService.partialUpdate(body, (error) => {
-        // console.dir(body);
+        lock = false;
         console.dir(cb);
         if (error) {
           io.sockets.in(cb._id).emit("error");
@@ -111,6 +114,7 @@ io.on("connection", (socket) => {
       }
 
       if (cb.price > price) {
+        lock = true;
         const newBidders = bidders;
         if (!bidders.includes(cb.highest_bidder)) {
           newBidders.push(cb.highest_bidder);
@@ -127,6 +131,7 @@ io.on("connection", (socket) => {
 
         auctionService.partialUpdate(body, (error) => {
           console.dir(cb);
+          lock = false;
           if (error) {
             io.sockets.in(cb._id).emit("error");
           } else {

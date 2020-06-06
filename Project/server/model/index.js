@@ -38,8 +38,8 @@ const auctionSchema = new Schema({
   description: {
     type: String
   },
-  time: {
-    type: Number
+  date: {
+    type: Date
   },
   price: {
     type: Number,

@@ -8,6 +8,9 @@
       <div v-if="this.user.username !== auction.username && isAuthenticated">
         <button @click="chat()">Chat</button>
       </div>
+      <div v-if="isValidStarter">
+        <button @click="start()">Start</button>
+      </div>
     </div>
     <div v-else-if="editMode === true">
       <AuctionEditForm :inheritedAuction="auction" />
@@ -40,11 +43,26 @@ export default {
     ...mapGetters(["user", "isAuthenticated"]),
     editable: function () {
       return this.isAuthenticated === true && this.auction.username === this.user.username && this.auction.status === "NEW";
+    },
+    isValidStarter: function () {
+      return this.user.username === this.auction.username && this.isAuthenticated && this.auction.status === "NEW";
     }
   },
   methods: {
     edit () {
       this.editMode = !this.editMode;
+    },
+    start () {
+      axios
+        .patch(
+          "/api/start",
+          { _id: this.auction._id }, { withCredentials: true })
+        .then(() => {
+          location.reload();
+        })
+        .catch((error) => {
+          this.logError(error);
+        });
     },
     chat () {
       const users = [this.auction.username, this.user.username];
@@ -90,7 +108,7 @@ export default {
     }
 
     this.emitter.on("new_buy", (cb) => {
-      console.log("new bid");
+      console.log("new buy");
       this.auction.status = "SOLD";
       this.auction.highest_bidder = cb.highest_bidder;
     });

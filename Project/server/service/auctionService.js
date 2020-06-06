@@ -41,7 +41,7 @@ module.exports.create = async (req, res) => {
     type: req.body.type,
     name: req.body.name,
     price: req.body.price,
-    time: req.body.time,
+    date: req.body.date,
     description: req.body.description,
     bidders: [],
     highest_bidder: ""
@@ -98,11 +98,11 @@ module.exports.partialUpdate = async (req, next) => {
   }
 };
 
-// module.exports.listBetween = async (req, next) => {
-//   try {
-//     await Auction.find()
-//   }
-// }
+module.exports.serverDate = (req, res) => {
+  var today = new Date();
+  var date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  res.json({ date: date });
+};
 
 module.exports.userOwnedAuctions = (req, res) => {
   Auction.find({
@@ -134,6 +134,17 @@ module.exports.userBiddedAuctions = (req, res) => {
 module.exports.start = (req, res) => {
   console.dir(req.body);
   Auction.updateOne({ _id: req.body._id }, { $set: { status: "ONGOING" } }, (error, doc) => {
+    if (error) {
+      res.status(500).json(processErrors(error));
+    } else {
+      res.status(201).json(doc);
+    }
+  });
+};
+
+module.exports.end = (req, res) => {
+  console.dir(req.body);
+  Auction.updateOne({ _id: req.body._id }, { $set: { status: "SOLD" } }, (error, doc) => {
     if (error) {
       res.status(500).json(processErrors(error));
     } else {

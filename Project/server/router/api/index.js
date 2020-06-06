@@ -23,6 +23,10 @@ router.route("/register")
   .post(userService.register)
   .all(rejectMethod);
 
+router.route("/date")
+  .get(auctionService.serverDate)
+  .all(rejectMethod);
+
 router.route("/user_status")
   .get(userService.currentUser)
   .all(rejectMethod);
@@ -45,6 +49,10 @@ router.route("/auctions_limited")
 
 router.route("/start")
   .patch(auctionService.start)
+  .all(rejectMethod);
+
+router.route("/end")
+  .patch(auctionService.end)
   .all(rejectMethod);
 
 router.route("/auction")

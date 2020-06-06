@@ -1,12 +1,15 @@
 <template>
   <div class="user-chats" v-if="chats !== null">
-    <div v-for="chatEl in chats" :key="chatEl._id">
-      <div v-if="chatEl !== null" v-on:click="openChat(chatEl)">
-          {{ otherUser(chatEl) }}
+    <div class="users-container">
+      <b>Users:</b>
+      <div id="users" v-for="chatEl in chats" :key="chatEl._id">
+        <div class="user" v-if="chatEl !== null" v-on:click="openChat(chatEl)">
+            {{ otherUser(chatEl) }}
+        </div>
       </div>
     </div>
-    <div v-if="chat !== null">
-      <Chat :inheritedChat="chat" :otherUser="otherUser(chat)" />
+    <div id="chat-container">
+      <Chat v-if="chat !== null" :inheritedChat="chat" :otherUser="otherUser(chat)" />
     </div>
   </div>
 </template>
@@ -52,6 +55,29 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.user-chats {
+  padding-top: 50px;
+  .users-container {
+    float: left;
+    position: fixed;
+    width: 15%;
+    text-align: center;
+  }
+  #users  {
+    background-color: purple;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    .user {
+      background-color: gray;
+      opacity: 50%;
+      width: 100%;
+    }
+  }
+  #chat-container {
+    float: left;
+    padding-left: 20%;
+    width: 85%;
+  }
+}
 </style>

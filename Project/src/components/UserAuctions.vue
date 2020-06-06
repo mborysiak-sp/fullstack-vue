@@ -1,13 +1,14 @@
 <template>
   <div class="user-auctions">
-    <div class="auctions">
+    <div class="auction-list">
       <b>Owned auctions</b>
       <div v-for="auction in ownedAuctions" :key="auction._id">
         <Auction :auction="auction" />
       </div>
     </div>
-    <div class="auctions">
-      <b>Bidded auctions</b>
+    <div class="auction-list">
+            <b>Bidded auctions</b>
+
       <div v-for="auction in biddedAuctions" :key="auction._id" class="auctions">
         <Auction :auction="auction" />
       </div>
@@ -45,7 +46,12 @@ export default {
 
 <style scoped lang="scss">
 .user-auctions {
-  .auctions {
+  .auction-list {
+    text-align: center;
+    li {
+      text-align: center;
+    }
+    width: 50%;
     float: left;
   }
 }

@@ -61,6 +61,12 @@ export default {
 .login-form {
   form {
     padding: 1em;
+    input {
+      margin: 5px;
+    }
+    label {
+      margin: 5px;
+    }
   }
 }
 </style>

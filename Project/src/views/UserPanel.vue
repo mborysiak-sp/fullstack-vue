@@ -1,7 +1,7 @@
 <template>
   <div class="user-panel">
     <button class="close-button" v-if="currentComponent !== null" @click="swapComponent(null)">Close</button>
-    <div :is="currentComponent"></div>
+    <div id="current-component" :is="currentComponent"></div>
     <div v-show="!currentComponent" v-for="component in componentsArray" v-bind:key="component.name">
       <button class="swap-button" @click="swapComponent(component)">{{component.name}}</button>
     </div>
@@ -35,6 +35,7 @@ export default {
 
 <style lang="scss" scoped>
 .user-panel {
-
+  background-color:wheat;
+  height: 100%;
 }
 </style>

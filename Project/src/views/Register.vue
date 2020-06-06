@@ -22,5 +22,7 @@ export default {
 .register {
   margin-top: 10vh;
   padding: 10px;
+  background-color:wheat;
+  height: 100%;
 }
 </style>

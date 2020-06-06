@@ -1,6 +1,5 @@
 <template>
     <div class="app">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <Navbar />
       <router-view />
     </div>
@@ -29,8 +28,6 @@ export default {
 
 <style lang="scss" scoped>
 body {
-  height: 100vh;
-  width: 100vw;
   padding: 0;
   margin: 0;
   font-family: "MetaWeb-Normal", sans-serif;
@@ -38,7 +35,6 @@ body {
     top: 0;
     left: 0;
     height: 100vh;
-    background-color: whitesmoke;
   }
   button {
     background-color: #3333;
