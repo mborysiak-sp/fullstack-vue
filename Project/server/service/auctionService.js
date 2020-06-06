@@ -4,7 +4,7 @@ const Auction = model.Auction;
 const processErrors = model.processErrors;
 
 module.exports.list = (req, res) => {
-  Auction.find((error, docs) => {
+  Auction.find({ status: "ONGOING" }, (error, docs) => {
     if (error) {
       res.json(error);
     } else {
@@ -86,10 +86,8 @@ module.exports.partialUpdate = async (req, next) => {
   }
 };
 
-module.exports.userAuctions = (req, res) => {
+module.exports.userOwnedAuctions = (req, res) => {
   Auction.find({
-    // $or: [{ username: req.user.username, status: "NEW" },
-    //   { username: req.user.username, status: "ONGOING" }]
     username: req.user.username
   }, (error, doc) => {
     if (error) {
@@ -100,10 +98,12 @@ module.exports.userAuctions = (req, res) => {
   });
 };
 
-module.exports.userHistory = (req, res) => {
+module.exports.userBiddedAuctions = (req, res) => {
   Auction.find({
-    $or: [{ username: req.user.username, status: "SOLD" },
-      { bidders: req.user.username, status: "SOLD" }]
+    $or: [
+      { highest_bidder: req.user.username, status: "SOLD" },
+      { bidders: req.user.username, status: "ONGOING" }
+    ]
   }, (error, doc) => {
     if (error) {
       res.json(processErrors(error));

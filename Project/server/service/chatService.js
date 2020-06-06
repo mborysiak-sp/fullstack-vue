@@ -52,7 +52,8 @@ module.exports.findOneBackend = async (req, next) => {
 
 module.exports.partialUpdate = async (req, next) => {
   try {
-    await Chat.updateOne({ _id: req.chatId }, req.$push);
+    console.dir(req);
+    await Chat.updateOne({ _id: req.chatId }, { $push: { messages: req.message } });
     console.log("Updated partially");
     return next();
   } catch (error) {

@@ -25,11 +25,6 @@ export default {
       .then(resp => {
         this.auctions = resp.data;
       });
-  },
-  methods: {
-    navigateTo (auction) {
-      window.location.href = "/auction/id:" + auction._id;
-    }
   }
 };
 </script>

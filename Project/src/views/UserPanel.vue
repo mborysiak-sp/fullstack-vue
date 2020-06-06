@@ -11,16 +11,16 @@
 
 <script>
 import AuctionForm from "@/components/AuctionForm";
-import AuctionEditForm from "@/components/AuctionEditForm";
 
 import { mapGetters } from "vuex";
+import UserAuctions from "../components/UserAuctions.vue";
 
 export default {
   name: "UserPanel",
   data: function () {
     return {
       currentComponent: null,
-      componentsArray: [AuctionForm, AuctionEditForm]
+      componentsArray: [AuctionForm, UserAuctions]
     };
   },
   computed: {

@@ -5,7 +5,7 @@
       <div v-if="editable === true">
         <button @click="edit()">Edit</button>
       </div>
-      <div v-if="this.user.username !== auction.username ">
+      <div v-if="this.user.username !== auction.username && isAuthenticated">
         <button @click="chat()">Chat</button>
       </div>
     </div>

@@ -49,12 +49,12 @@ router.route("/auction")
   .put(isLoggedIn, auctionService.update)
   .all(rejectMethod);
 
-router.route("/user_auctions")
-  .get(isLoggedIn, auctionService.userAuctions)
+router.route("/user_owned_auctions")
+  .get(isLoggedIn, auctionService.userOwnedAuctions)
   .all(rejectMethod);
 
-router.route("/user_history")
-  .get(isLoggedIn, auctionService.userHistory)
+router.route("/user_bidded_auctions")
+  .get(isLoggedIn, auctionService.userBiddedAuctions)
   .all(rejectMethod);
 
 router.route("/chat")

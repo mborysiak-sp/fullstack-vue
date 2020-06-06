@@ -145,8 +145,8 @@ io.on("connection", (socket) => {
 
   socket.on("new_message", async (cb) => {
     if (isAuthenticated(socket)) {
-      console.dir(io.sockets.adapter.rooms);
-      console.log(cb._id);
+      // console.dir(io.sockets.adapter.rooms);
+      // console.log(cb._id);
       const usersCount = io.sockets.adapter.rooms[cb._id].length;
 
       const message = new Message({
@@ -161,17 +161,15 @@ io.on("connection", (socket) => {
 
       const body = {
         chatId: cb._id,
-        $push: {
-          messages: message
-        }
+        message: message
       };
 
       await chatService.partialUpdate(body, (error) => {
-        console.dir(cb);
+        // console.dir(body);
         if (error) {
           io.sockets.in(cb._id).emit("error");
         } else {
-          io.sockets.in(cb._id).emit("new_message", cb);
+          io.sockets.in(cb._id).emit("new_message", message);
           console.log(`[Socket]: New transaction from user: ${cb.username}`);
         }
       });
