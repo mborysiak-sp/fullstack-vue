@@ -104,6 +104,9 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+  .auction {
+    padding: 1vh;
+    margin-top: 1vh;
+  }
 </style>

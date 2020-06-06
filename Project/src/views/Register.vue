@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="register">
     <LoginForm />
     <RegisterForm />
   </div>
@@ -19,5 +19,8 @@ export default {
 </script>
 
 <style>
-
+.register {
+  margin-top: 10vh;
+  padding: 10px;
+}
 </style>

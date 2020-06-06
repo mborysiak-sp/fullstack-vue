@@ -49,12 +49,11 @@ export default {
       )
         .then(() => {
           this.$swal("Registered user", "Ok", "success");
-          this.$router.push({ name: "Home" });
           this.clear();
         })
         .catch((error) => {
           this.logError(error);
-          this.$swal("Error", `${error}`, "error");
+          alert(`${error}`);
         });
     },
     clear () {
@@ -64,6 +63,6 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>

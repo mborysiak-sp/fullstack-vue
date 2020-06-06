@@ -42,13 +42,12 @@ export default {
       };
       this.login(user)
         .then(() => {
-          this.$swal("Great", "Ready", "success");
           this.$router.push({ name: "Home" });
           this.clear();
         })
         .catch((error) => {
           this.logError(error);
-          this.$swal("Oh ho", `${error}`, "error");
+          alert(`${error}`);
         });
     },
     clear () {
@@ -58,6 +57,10 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.login-form {
+  form {
+    padding: 1em;
+  }
+}
 </style>

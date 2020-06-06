@@ -1,12 +1,16 @@
 <template>
-  <div class="auctions">
-    <b>OWNED AUCTIONS</b>
-    <div v-for="auction in ownedAuctions" :key="auction._id">
-      <Auction :auction="auction" />
+  <div class="user-auctions">
+    <div class="auctions">
+      <b>Owned auctions</b>
+      <div v-for="auction in ownedAuctions" :key="auction._id">
+        <Auction :auction="auction" />
+      </div>
     </div>
-    <b>BIDDED AUCTIONS</b>
-    <div v-for="auction in biddedAuctions" :key="auction._id">
-      <Auction :auction="auction" />
+    <div class="auctions">
+      <b>Bidded auctions</b>
+      <div v-for="auction in biddedAuctions" :key="auction._id" class="auctions">
+        <Auction :auction="auction" />
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +43,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+.user-auctions {
+  .auctions {
+    float: left;
+  }
+}
 
 </style>

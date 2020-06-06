@@ -1,11 +1,10 @@
 <template>
   <div class="user-panel">
-    <h2>Hello {{user.username}} </h2>
+    <button class="close-button" v-if="currentComponent !== null" @click="swapComponent(null)">Close</button>
     <div :is="currentComponent"></div>
     <div v-show="!currentComponent" v-for="component in componentsArray" v-bind:key="component.name">
-      <button @click="swapComponent(component)">{{component.name}}</button>
+      <button class="swap-button" @click="swapComponent(component)">{{component.name}}</button>
     </div>
-    <button v-if="currentComponent !== null" @click="swapComponent(null)">Close</button>
   </div>
 </template>
 
@@ -34,6 +33,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.user-panel {
 
+}
 </style>

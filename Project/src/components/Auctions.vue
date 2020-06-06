@@ -42,6 +42,12 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.auctions {
+  margin-top: 1vh;
+  padding-top: 1vh;
+  .load-button {
+    background-color: purple;
+  }
+}
 </style>
