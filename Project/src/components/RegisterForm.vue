@@ -48,7 +48,7 @@ export default {
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       )
         .then(() => {
-          this.$swal("Registered user", "Ok", "success");
+          alert("Registration complete");
           this.clear();
         })
         .catch((error) => {

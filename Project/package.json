@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "api": "nodemon server/index.js",
-    "serve": "vue-cli-service serve",
+    "dev": "nodemon server/index.js",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "startConcurrently": "concurrently \"node server/index.js\" \"serve dist/\"",
+    "start": "npm run build && node server/index.js",
+    "deploy": "npm run build && git add dist/ && git commit -am 'Deploy' && git push -f heroku master"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -26,10 +28,13 @@
     "passport-http": "^0.3.0",
     "passport-local": "^1.0.0",
     "passport.socketio": "^3.7.0",
+    "serve": "^11.3.2",
     "socket.io": "2.3.0",
+    "concurrently": "^5.2.0",
     "vue": "^2.6.11",
     "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.2.0",
+    "dotenv": "^8.2.0",
     "vue-socket.io": "^3.0.9",
     "vue-swal": "^1.0.0",
     "vuex": "^3.4.0"
@@ -40,7 +45,6 @@
     "@vue/cli-plugin-vuex": "~4.3.0",
     "@vue/cli-service": "~4.3.0",
     "@vue/eslint-config-standard": "^5.1.2",
-    "dotenv": "^8.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",

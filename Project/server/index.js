@@ -5,7 +5,8 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const server = require("./https")(app);
-
+// const http = require("http");
+// const server = http.createServer(app);
 // Parsers configs
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -223,7 +224,7 @@ io.on("connection", (socket) => {
 
 // Cross-Origin Resource Sharing
 const cors = require("cors");
-app.use(cors({ credentials: true, origin: "https://localhost:5001" }));
+app.use(cors({ credentials: true, origin: "https://localhost:5000" }));
 
 // Axios config
 const axios = require("axios");
@@ -231,11 +232,18 @@ const axiosConfig = {
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "https://localhost:5001",
+    "Access-Control-Allow-Origin": "https://localhost:5000",
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE"
   }
 };
 axios.config = axiosConfig;
+
+// Public config
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../dist")));
+
+app.get("*", (req, res) => res.sendFile(__dirname, "/public/index.html"));
+app.get("/", (req, res) => res.sendFile(__dirname, "/public/index.html"));
 
 // Router config
 const router = require("./router/api/index");
