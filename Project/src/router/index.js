@@ -26,7 +26,7 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: "/userChatsView",
+    path: "/userChatsView/:id",
     name: "UserChatsView",
     component: UserChatsView,
     meta: { requiresLogin: true }

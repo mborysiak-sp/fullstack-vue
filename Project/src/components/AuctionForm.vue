@@ -64,7 +64,7 @@ export default {
         { withCredentials: true }
       )
         .then(() => {
-          location.reload();
+          alert("Product created");
         })
         .catch((err) => {
           alert(err);

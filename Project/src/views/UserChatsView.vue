@@ -1,6 +1,6 @@
 <template>
   <div class="user-chats">
-    <UserChats />
+    <UserChats :id="id" />
   </div>
 </template>
 
@@ -11,6 +11,11 @@ export default {
   name: "UserChatsView",
   components: {
     UserChats
+  },
+  data () {
+    return {
+      id: this.$route.params.id
+    };
   }
 };
 </script>

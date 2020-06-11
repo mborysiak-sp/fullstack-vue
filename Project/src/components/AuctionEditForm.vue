@@ -57,18 +57,6 @@ export default {
   methods: {
     ...mapActions(["logError"]),
     put () {
-      // const auction = {
-      //   _id: this.auction.id,
-      //   name: this.auction.name,
-      //   price: this.auction.price,
-      //   type: this.auction.type,
-      //   username: this.auction.username,
-      //   status: this.auction.status,
-      //   description: this.auction.description,
-      //   date: this.auction.date,
-      //   bidders: this.auction.bidders,
-      //   highest_bidder: this.auction.highest_bidder
-      // };
       axios
         .put("/api/auction", this.auction, { withCredentials: true })
         .then(() => {

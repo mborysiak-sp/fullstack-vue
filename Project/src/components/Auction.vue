@@ -53,37 +53,31 @@ export default {
       this.editMode = !this.editMode;
     },
     start () {
-      axios
-        .patch(
-          "/api/start",
-          { _id: this.auction._id }, { withCredentials: true })
-        .then(() => {
-          location.reload();
-        })
-        .catch((error) => {
-          this.logError(error);
-        });
+      this.emitter.emit("start", {
+        _id: this.auction._id,
+        status: "ONGOING"
+      });
     },
-    chat () {
+    async chat () {
       const users = [this.auction.username, this.user.username];
 
       let result = {};
 
-      axios.post("/api/exists", { users: users })
+      await axios.post("/api/exists", { users: users })
         .then((cb) => {
           if (cb.data === null) {
             axios.post("/api/chat", { users: users })
               .then((cb) => {
-                result = cb.data;
+                result = cb.data._id;
               })
               .catch((error) => {
                 console.log(error);
               });
           } else {
-            result = cb.data;
+            result = cb.data._id;
           }
-          console.dir(result);
-          router.push({ name: "UserChatsView", params: { chat: result } });
+          console.log(`passed id=${result}"`);
+          router.push({ name: "UserChatsView", params: { id: result } });
         })
         .catch((error) => {
           console.log(error);
@@ -100,12 +94,17 @@ export default {
     };
   },
   created () {
-    if (this.isAuthenticated && this.auction.type === "BID" && this.auction.status === "ONGOING") {
+    if (this.isAuthenticated) {
       this.emitter.emit("join", {
         _id: this.auction._id,
         username: this.user.username
       });
     }
+
+    this.emitter.on("start", (cb) => {
+      console.log("changing value");
+      this.auction.status = "ONGOING";
+    });
 
     this.emitter.on("new_buy", (cb) => {
       console.log("new buy");

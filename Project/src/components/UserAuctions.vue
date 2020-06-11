@@ -7,8 +7,7 @@
       </div>
     </div>
     <div class="auction-list">
-            <b>Bidded auctions</b>
-
+      <b>Bidded auctions</b>
       <div v-for="auction in biddedAuctions" :key="auction._id" class="auctions">
         <Auction :auction="auction" />
       </div>

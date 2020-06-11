@@ -63,7 +63,7 @@ const isAuthenticated = (socket) => {
 let lock = false;
 
 io.on("connection", (socket) => {
-  console.log(`new connection ${socket.id}`);
+  // console.log(`new connection ${socket.id}`);
 
   const username = socket.request.user.username;
 
@@ -74,8 +74,24 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("start", (cb) => {
-    console.log(`started ${cb._id}`);
+  socket.on("start", async (cb) => {
+    if (isAuthenticated(socket)) {
+      const body = {
+        _id: cb._id,
+        $set: {
+          status: cb.status
+        }
+      };
+
+      await auctionService.partialUpdate(body, (error) => {
+        if (error) {
+          io.sockets.in(cb._id).emit("error");
+        } else {
+          io.sockets.in(cb._id).emit("start", cb);
+          console.log(`started ${cb._id}`);
+        }
+      });
+    }
   });
 
   socket.on("new_buy", async (cb) => {
@@ -154,7 +170,6 @@ io.on("connection", (socket) => {
       // console.dir(io.sockets.adapter.rooms);
       // console.log(cb._id);
       const usersCount = io.sockets.adapter.rooms[cb._id].length;
-
       const message = new Message({
         username: cb.username,
         text: cb.text,
