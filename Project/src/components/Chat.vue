@@ -3,16 +3,13 @@
     <div class="username">
       Chatting with: {{ otherUser }}
     </div>
-    <br>
-    <table>
-      <tr></tr>
+    <table class="table-chat">
+      <tr><div v-for="message in chat.messages" :key="message._id">
+        <th> {{ message.username }}: </th><td>{{ message.text }}</td>
+      </div></tr>
       <tr id="input"><label>Type your message:</label>
       <input id="message-text" v-model="text" type="text" placeholder="Text" required>
       <button @click="send()">Send</button></tr>
-      <tr></tr>
-      <div v-for="message in chat.messages" :key="message._id">
-        <tr><th> {{ message.username }}: </th><td> {{ message.text }} </td></tr>
-      </div>
     </table>
   </div>
 </template>
@@ -58,7 +55,7 @@ export default {
       const checkIfNotSeen = (message) => {
         return message.seen !== true && this.user.username !== message.username;
       };
-      if (this.chat.messages.find(message => checkIfNotSeen(message)) !== undefined) {
+      if (this.chat.messages.reverse().find(message => checkIfNotSeen(message)) !== undefined) {
         console.log("Send seen");
         this.emitter.emit("seen", { _id: this.chat._id, username: this.user.username });
       }
@@ -97,7 +94,6 @@ export default {
 .chat {
   .username {
     font-weight: 800;
-    text-align: center;
   }
   table {
     label {
@@ -105,8 +101,6 @@ export default {
     }
     tr {
       text-align: left;
-      th {
-      }
       td {
         display: flex;
         word-break: break-all;

@@ -1,11 +1,18 @@
 <template>
   <div class="auction" v-if="auction !== null">
     <div v-if="editMode === false">
-      <AuctionInfo :auction="auction" :emitter="emitter" />
+      <AuctionInfo :auction="auction" />
       <div v-if="editable === true">
         <button @click="edit()">Edit</button>
       </div>
-      <div v-if="this.user.username !== auction.username && isAuthenticated">
+      <div v-if="isValidBidder">
+        <div v-if="auction.type === 'BID'">
+          <button @click="bid()">Bid</button>
+          <input v-model="price" type="number" min="1" step="1" max=6 >
+        </div>
+        <div v-else-if="auction.type === 'BUY'">
+          <button @click="buy()">Buy</button>
+        </div>
         <button @click="chat()">Chat</button>
       </div>
       <div v-if="isValidStarter">
@@ -36,7 +43,8 @@ export default {
   data () {
     return {
       editMode: false,
-      emitter: io()
+      emitter: io(),
+      price: ""
     };
   },
   computed: {
@@ -46,6 +54,9 @@ export default {
     },
     isValidStarter: function () {
       return this.user.username === this.auction.username && this.isAuthenticated && this.auction.status === "NEW";
+    },
+    isValidBidder: function () {
+      return this.user.username !== this.auction.username && this.isAuthenticated;
     }
   },
   methods: {
@@ -58,11 +69,28 @@ export default {
         status: "ONGOING"
       });
     },
+    buy () {
+      this.emitter.emit("new_buy", {
+        _id: this.auction._id,
+        bidders: this.user.username,
+        highest_bidder: this.user.username,
+        status: "SOLD"
+      });
+    },
+    bid () {
+      if (this.price <= this.auction.price) {
+        console.log("Pay more plz");
+      } else {
+        this.emitter.emit("new_bid", {
+          _id: this.auction._id,
+          highest_bidder: this.user.username,
+          price: this.price
+        });
+      }
+    },
     async chat () {
       const users = [this.auction.username, this.user.username];
-
       let result = {};
-
       await axios.post("/api/exists", { users: users })
         .then((cb) => {
           if (cb.data === null) {

@@ -99,6 +99,7 @@ io.on("connection", (socket) => {
       const body = {
         _id: cb._id,
         $set: {
+          bidders: cb.bidders,
           highest_bidder: cb.highest_bidder,
           status: cb.status
         }

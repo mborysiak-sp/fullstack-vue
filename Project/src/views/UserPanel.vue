@@ -5,21 +5,22 @@
     <div v-show="!currentComponent" v-for="component in componentsArray" v-bind:key="component.name">
       <button class="swap-button" @click="swapComponent(component)">{{component.name}}</button>
     </div>
+    <button class="close-button" v-if="currentComponent !== null" @click="swapComponent(null)">Close</button>
   </div>
 </template>
 
 <script>
 import AuctionForm from "@/components/AuctionForm";
-
+import OwnedAuctions from "../components/OwnedAuctions.vue";
+import BiddedAuctions from "../components/BiddedAuctions.vue";
 import { mapGetters } from "vuex";
-import UserAuctions from "../components/UserAuctions.vue";
 
 export default {
   name: "UserPanel",
   data: function () {
     return {
       currentComponent: null,
-      componentsArray: [AuctionForm, UserAuctions]
+      componentsArray: [AuctionForm, OwnedAuctions, BiddedAuctions]
     };
   },
   computed: {
@@ -35,7 +36,11 @@ export default {
 
 <style lang="scss" scoped>
 .user-panel {
-  background-color:wheat;
-  height: 100%;
+  .close-button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  padding-top: 10%;
 }
 </style>

@@ -14,14 +14,43 @@ module.exports.list = (req, res) => {
 };
 
 module.exports.listBetween = (req, res) => {
-  Auction.find({ status: "ONGOING" })
+  console.dir(req.body.conditions);
+  Auction.find(req.body.conditions)
     .skip(req.body.from).limit(req.body.limit).exec((error, docs) => {
       if (error) {
         res.json(processErrors(error));
       } else {
+        // console.dir(docs);
         res.json(docs);
       }
     });
+};
+
+module.exports.userOwnedAuctions = (req, res) => {
+  Auction.find({
+    username: req.user.username
+  }, (error, doc) => {
+    if (error) {
+      res.status(500).json(processErrors(error));
+    } else {
+      res.status(201).json(doc);
+    }
+  });
+};
+
+module.exports.userBiddedAuctions = (req, res) => {
+  Auction.find({
+    $or: [
+      { highest_bidder: req.user.username, status: "SOLD" },
+      { bidders: req.user.username, status: "ONGOING" }
+    ]
+  }, (error, doc) => {
+    if (error) {
+      res.json(processErrors(error));
+    } else {
+      res.json(doc);
+    }
+  });
 };
 
 module.exports.singleAuction = (req, res) => {
@@ -102,33 +131,6 @@ module.exports.serverDate = (req, res) => {
   var today = new Date();
   var date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
   res.json({ date: date });
-};
-
-module.exports.userOwnedAuctions = (req, res) => {
-  Auction.find({
-    username: req.user.username
-  }, (error, doc) => {
-    if (error) {
-      res.status(500).json(processErrors(error));
-    } else {
-      res.status(201).json(doc);
-    }
-  });
-};
-
-module.exports.userBiddedAuctions = (req, res) => {
-  Auction.find({
-    $or: [
-      { highest_bidder: req.user.username, status: "SOLD" },
-      { bidders: req.user.username, status: "ONGOING" }
-    ]
-  }, (error, doc) => {
-    if (error) {
-      res.json(processErrors(error));
-    } else {
-      res.json(doc);
-    }
-  });
 };
 
 module.exports.start = (req, res) => {

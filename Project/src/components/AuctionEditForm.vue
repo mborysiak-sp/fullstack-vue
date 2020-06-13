@@ -5,7 +5,7 @@
         <label>Name:</label>
         <input v-model="auction.name" id="name" type="text" minlength="2" placeholder="Name">
       </div>
-      <div>
+      <div class="element">
         <label>Price:</label>
         <input v-model="auction.price" id="price" type="number" min="1" step="1" placeholder="Price">
       </div>

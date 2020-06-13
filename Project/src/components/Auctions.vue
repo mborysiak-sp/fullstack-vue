@@ -1,11 +1,9 @@
 <template>
   <div class="auctions">
-  <table>
-    <div v-for="auction in auctions" :key="auction._id">
-      <Auction :auction="auction" />
-    </div>
-  </table>
-    <button v-if="currentAuctions != 0 && currentAuctions % 10 === 0" class="load-button" @click="loadAuctions">Load more auctions</button>
+      <div class="container" v-for="auction in auctions" :key="auction._id">
+        <Auction :auction="auction" />
+      </div>
+      <button v-if="currentAuctions != 0 && currentAuctions % 10 === 0" class="load-button" @click="loadAuctions">Load more auctions</button>
   </div>
 </template>
 
@@ -13,6 +11,7 @@
 import axios from "axios";
 import Auction from "./Auction";
 import moment from "moment";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Auctions",
@@ -26,11 +25,15 @@ export default {
   components: {
     Auction
   },
+  computed: {
+    ...mapGetters(["user"])
+  },
+  props: ["conditions"],
   methods: {
     loadAuctions () {
       const limit = 10;
       let result = [];
-      axios.post("/api/auctions_limited", { from: this.currentAuctions, limit: limit }, { withCredentials: true })
+      axios.post("/api/auctions_limited", { conditions: this.conditions, from: this.currentAuctions, limit: limit }, { withCredentials: true })
         .then(resp => {
           const bids = resp.data.filter(auction => auction.type === "BID");
           const buys = resp.data.filter(auction => auction.type === "BUY");
@@ -44,6 +47,7 @@ export default {
           }
           this.currentAuctions = this.auctions.length;
         });
+      console.dir(this.auctions);
     },
     endAuctions (auctions) {
       const results = [];
@@ -81,6 +85,7 @@ export default {
     }
   },
   async created () {
+    console.dir(this.conditions);
     await axios.get("/api/date")
       .then((res) => {
         console.dir(res);
@@ -94,9 +99,16 @@ export default {
 
 <style lang="scss" scoped>
 .auctions {
-  text-align: center;
   margin-top: 1vh;
   padding-top: 1vh;
+  border-radius: 25px;
+  background: #73AD21;
+  .container {
+    text-align: center;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-evenly;
+  }
   .load-button {
     background-color: purple;
   }
