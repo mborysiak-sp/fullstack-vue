@@ -37,9 +37,8 @@ export default {
         .then(resp => {
           const bids = resp.data.filter(auction => auction.type === "BID");
           const buys = resp.data.filter(auction => auction.type === "BUY");
-          result = bids
-            .filter(auction => auction.status === "NEW" || auction.status === "SOLD")
-            .concat(this.endAuctions(resp.data.filter(auction => auction.status === "ONGOING"))).concat(buys);
+          result = bids.filter(auction => auction.status === "NEW" || auction.status === "SOLD")
+            .concat(this.endAuctions(bids.filter(auction => auction.status === "ONGOING"))).concat(buys);
           if (this.currentAuctions === 0) {
             this.auctions = result;
           } else {
