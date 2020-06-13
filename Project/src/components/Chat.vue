@@ -62,11 +62,6 @@ export default {
         console.log("Send seen");
         this.emitter.emit("seen", { _id: this.chat._id, username: this.user.username });
       }
-      // for (const message of this.chat.messages) {
-      //   if (checkIfNotSeen(message) === true) {
-      //     break;
-      //   }
-      // }
     },
     send () {
       if (document.getElementById("message-text").value === "") {
@@ -82,7 +77,6 @@ export default {
     }
   },
   created () {
-    // console.dir(this.chat.messages);
     if (this.isAuthenticated) {
       this.emitter.emit("join", { _id: this.chat._id, username: this.user.username });
     }

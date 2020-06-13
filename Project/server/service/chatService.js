@@ -24,7 +24,6 @@ module.exports.findOne = (req, res) => {
 };
 
 module.exports.findOneByUsers = (req, res) => {
-  // console.dir(req);
   Chat.findOne({
     $or: [
       { users: [req.body.users[0], req.body.users[1]] },
@@ -54,6 +53,17 @@ module.exports.partialUpdate = async (req, next) => {
   try {
     console.dir(req);
     await Chat.updateOne({ _id: req.chatId }, { $push: { messages: req.message } });
+    console.log("Updated partially");
+    return next();
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+};
+
+module.exports.updateSeen = async (req, next) => {
+  try {
+    await Chat.updateOne({ _id: req._id }, req.$set);
     console.log("Updated partially");
     return next();
   } catch (error) {

@@ -5,6 +5,7 @@
       <div id="users" v-for="chatEl in chats" :key="chatEl._id">
         <div class="user" v-if="chatEl !== null"  v-on:click="openChat(chatEl)">
             {{ otherUser(chatEl) }}
+            <div v-if="checkChat(chat)">(unread)</div>
         </div>
       </div>
     </div>
@@ -57,6 +58,15 @@ export default {
     openChat (chat) {
       this.chat = chat;
       this.$set(this.chat, chat, chat);
+    },
+    checkChat (chat) {
+      const checkIfNotSeen = (message) => {
+        return message.seen !== true && this.user.username !== message.username;
+      };
+      if (this.chat.messages.find(message => checkIfNotSeen(message)) !== undefined) {
+        return true;
+      }
+      return false;
     }
   }
 };

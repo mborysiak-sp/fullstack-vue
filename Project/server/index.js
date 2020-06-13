@@ -63,7 +63,6 @@ const isAuthenticated = (socket) => {
 let lock = false;
 
 io.on("connection", (socket) => {
-  // console.log(`new connection ${socket.id}`);
 
   const username = socket.request.user.username;
 
@@ -167,8 +166,6 @@ io.on("connection", (socket) => {
 
   socket.on("new_message", async (cb) => {
     if (isAuthenticated(socket)) {
-      // console.dir(io.sockets.adapter.rooms);
-      // console.log(cb._id);
       const usersCount = io.sockets.adapter.rooms[cb._id].length;
       const message = new Message({
         username: cb.username,
@@ -186,7 +183,6 @@ io.on("connection", (socket) => {
       };
 
       await chatService.partialUpdate(body, (error) => {
-        // console.dir(body);
         if (error) {
           io.sockets.in(cb._id).emit("error");
         } else {
@@ -221,12 +217,12 @@ io.on("connection", (socket) => {
           $set: { messages: messages }
         };
 
-        chatService.partialUpdate(body, (error) => {
-          console.dir(body);
+        chatService.updateSeen(body, (error) => {
+          // console.dir(body.$set.messages);
           if (error) {
             io.sockets.in(cb._id).emit("error");
           } else {
-            io.sockets.in(cb._id).emit("seen", cb);
+            // io.sockets.in(cb._id).emit("seen", cb);
             console.log(`Updated unseen messages for: ${cb.username}`);
           }
         });

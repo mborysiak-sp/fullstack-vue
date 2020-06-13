@@ -30,6 +30,12 @@ const routes = [
     name: "UserChatsView",
     component: UserChatsView,
     meta: { requiresLogin: true }
+  },
+  {
+    path: "/userChatsView/",
+    name: "UserChatsView",
+    component: UserChatsView,
+    meta: { requiresLogin: true }
   }
 ];
 

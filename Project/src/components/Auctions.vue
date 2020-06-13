@@ -42,7 +42,6 @@ export default {
           } else {
             this.auctions = this.auctions.concat(result);
           }
-
           this.currentAuctions = this.auctions.length;
         });
     },

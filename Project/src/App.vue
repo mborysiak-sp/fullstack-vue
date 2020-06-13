@@ -7,7 +7,7 @@
 
 <script>
 import Navbar from "@/components/Navbar";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -16,9 +16,6 @@ export default {
   },
   methods: {
     ...mapActions(["setUser"])
-  },
-  computed: {
-    ...mapGetters(["user"])
   },
   created () {
     this.setUser();

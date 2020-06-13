@@ -56,7 +56,6 @@ router.route("/end")
   .all(rejectMethod);
 
 router.route("/auction")
-  // .get(isLoggedIn, auctionService.singleAuction)
   .post(isLoggedIn, auctionService.create)
   .put(isLoggedIn, auctionService.update)
   .all(rejectMethod);
@@ -70,7 +69,6 @@ router.route("/user_bidded_auctions")
   .all(rejectMethod);
 
 router.route("/chat")
-  // .get(isLoggedIn, chatService.findOneByUsers)
   .post(isLoggedIn, chatService.create)
   .all(rejectMethod);
 
