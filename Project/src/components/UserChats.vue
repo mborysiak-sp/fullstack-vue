@@ -7,9 +7,7 @@
         <div v-if="checkChat(chatEl)">(unread)</div>
       </div>
     </div>
-    <div id="chat-container">
-      <Chat v-if="chat !== null" :chat="getChat" :otherUser="otherUser(chat)" />
-    </div>
+    <Chat id="chat" v-if="chat !== null" :chat="getChat" :otherUser="otherUser(chat)" />
   </div>
 </template>
 
@@ -96,14 +94,9 @@ export default {
       color: black;
     }
   }
-  #chat-container {
+  #chat {
+    //height: 50vh;
     flex-basis: 80%;
-    //margin-left: 20vw;
-    // flex-grow: 1;
-    // display: flex;
-    //flex-wrap: wrap;
-    //justify-content: flex-start;
-    //overflow: auto;
   }
 }
 

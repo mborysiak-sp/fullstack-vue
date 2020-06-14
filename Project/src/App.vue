@@ -24,6 +24,7 @@ export default {
 </script>
 
 <style lang="scss">
+body {}
 .app {
   //font-family: "MetaWeb-Normal", sans-serif;
   padding-top: 5vh;

@@ -1,9 +1,6 @@
 <template>
   <div class="chat" v-if="chat !== null && chat !== undefined">
-    <div class="message" v-for="message in chat.messages" :key="message._id">
-      <div class="username">{{ message.username }}:</div>
-      <div class="text">{{ message.text }}</div>
-    </div>
+    <Message v-for="message in chat.messages" :message="message" :key="message._id" />
     <div id="input-message">
       <label>Type your message:</label>
       <input id="message-text" v-model="text" type="text" placeholder="Text" required>
@@ -14,10 +11,16 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Message from "@/components/Message";
 import io from "socket.io-client";
+
+function scrollBottom () {
+  this.$el.scrollTo(0, this.$el.scrollHeight);
+}
 
 export default {
   name: "Chat",
+  components: { Message },
   computed: {
     ...mapGetters(["user", "isAuthenticated"])
   },
@@ -78,6 +81,7 @@ export default {
 
     this.emitter.on("new_message", (cb) => {
       this.chat.messages.push(cb);
+      this.$nextTick(scrollBottom);
     });
   },
   beforeDestroy () {
@@ -90,20 +94,15 @@ export default {
 
 <style lang="scss" scoped>
 .chat {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  .message {
-    text-align: left;
-    .username {
-      word-break: break-all;
-    }
-    .text {
-      word-break: break-all;
-    }
-  }
+  display: block;
+  height: 50vh;
+  height: inherit;
+  width: 100%;
+  padding: 2% 4%;
+  box-sizing: border-box;
+  overflow-y: scroll;
   #input-message {
-
+    float: left;
   }
 }
 </style>
