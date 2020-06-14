@@ -33,7 +33,6 @@ module.exports.findOneByUsers = (req, res) => {
     if (error) {
       res.status(500).json(processErrors(error));
     } else {
-      console.dir(doc);
       res.status(201).json(doc);
     }
   });
@@ -51,7 +50,6 @@ module.exports.findOneBackend = async (req, next) => {
 
 module.exports.partialUpdate = async (req, next) => {
   try {
-    console.dir(req);
     await Chat.updateOne({ _id: req.chatId }, { $push: { messages: req.message } });
     console.log("Updated partially");
     return next();
@@ -73,7 +71,6 @@ module.exports.updateSeen = async (req, next) => {
 };
 
 module.exports.create = async (req, res) => {
-  console.dir(req.body.users);
   const chat = new Chat({
     messages: [],
     users: req.body.users

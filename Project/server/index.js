@@ -107,7 +107,6 @@ io.on("connection", (socket) => {
 
       await auctionService.partialUpdate(body, (error) => {
         lock = false;
-        console.dir(cb);
         if (error) {
           io.sockets.in(cb._id).emit("error");
         } else {
@@ -147,7 +146,6 @@ io.on("connection", (socket) => {
         };
 
         auctionService.partialUpdate(body, (error) => {
-          console.dir(cb);
           lock = false;
           if (error) {
             io.sockets.in(cb._id).emit("error");
@@ -219,7 +217,6 @@ io.on("connection", (socket) => {
         };
 
         chatService.updateSeen(body, (error) => {
-          // console.dir(body.$set.messages);
           if (error) {
             io.sockets.in(cb._id).emit("error");
           } else {

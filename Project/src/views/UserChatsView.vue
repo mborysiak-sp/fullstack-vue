@@ -1,5 +1,5 @@
 <template>
-  <div class="user-chats">
+  <div class="user-chats-view">
     <UserChats :id="id" />
   </div>
 </template>
@@ -21,8 +21,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user-chats {
-  background-color:wheat;
-  height: 100%;
+.user-chats-view {
+  margin: auto;
+  padding: auto;
 }
 </style>

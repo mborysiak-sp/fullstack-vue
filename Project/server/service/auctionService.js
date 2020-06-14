@@ -14,13 +14,11 @@ module.exports.list = (req, res) => {
 };
 
 module.exports.listBetween = (req, res) => {
-  console.dir(req.body.conditions);
   Auction.find(req.body.conditions)
     .skip(req.body.from).limit(req.body.limit).exec((error, docs) => {
       if (error) {
         res.json(processErrors(error));
       } else {
-        // console.dir(docs);
         res.json(docs);
       }
     });
@@ -107,7 +105,6 @@ module.exports.update = (req, res) => {
 
 module.exports.findOneBackend = async (req, next) => {
   try {
-    console.dir(req);
     const doc = await Auction.findOne({ _id: req._id });
     return doc;
   } catch (error) {
@@ -134,7 +131,6 @@ module.exports.serverDate = (req, res) => {
 };
 
 module.exports.start = (req, res) => {
-  console.dir(req.body);
   Auction.updateOne({ _id: req.body._id }, { $set: { status: "ONGOING" } }, (error, doc) => {
     if (error) {
       res.status(500).json(processErrors(error));
@@ -145,7 +141,6 @@ module.exports.start = (req, res) => {
 };
 
 module.exports.end = (req, res) => {
-  console.dir(req.body);
   Auction.updateOne({ _id: req.body._id }, { $set: { status: "SOLD" } }, (error, doc) => {
     if (error) {
       res.status(500).json(processErrors(error));

@@ -46,7 +46,6 @@ export default {
           }
           this.currentAuctions = this.auctions.length;
         });
-      console.dir(this.auctions);
     },
     endAuctions (auctions) {
       const results = [];
@@ -84,10 +83,8 @@ export default {
     }
   },
   async created () {
-    console.dir(this.conditions);
     await axios.get("/api/date")
       .then((res) => {
-        console.dir(res);
         this.date = res.data.date;
       });
     this.loadAuctions();
@@ -99,9 +96,14 @@ export default {
 <style lang="scss" scoped>
 .auctions {
   margin-top: 1vh;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
   padding-top: 1vh;
-  border-radius: 25px;
-  background: #73AD21;
+  //background-color: #639FAB;
+  border-radius: 5vmax;
+  padding: 3vmin;
+  padding-top: 5vh;
   .container {
     text-align: center;
     display: flex;

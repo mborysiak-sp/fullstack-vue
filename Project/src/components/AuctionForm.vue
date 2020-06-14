@@ -25,6 +25,10 @@
         <input type="date" v-model="date" placeholder="date">
       </div>
       <div class="element">
+        <label>Start now:</label>
+        <input type="checkbox" v-model="status" true-value="ONGOING" false-value="NEW">
+      </div>
+      <div class="element">
         <input type="button" @click="create()" value="Submit">
       </div>
     </form>
@@ -33,6 +37,7 @@
 
 <script>
 import axios from "axios";
+import router from "../router";
 
 export default {
   name: "AuctionForm",
@@ -42,7 +47,7 @@ export default {
       price: "",
       type: "",
       username: this.$store.getters.user.username,
-      status: "NEW",
+      status: "",
       description: "",
       date: ""
     };
@@ -55,9 +60,14 @@ export default {
         type: this.type,
         username: this.$store.getters.user.username,
         description: this.description,
-        status: "NEW",
+        status: this.status,
         date: this.date
       };
+      console.dir(auction);
+      // const start = document.getElementById("start");
+      // if (start.checked) {
+      //   auction.status = "ONGOING";
+      // }
       await axios.post(
         "/api/auction",
         auction,
@@ -65,6 +75,7 @@ export default {
       )
         .then(() => {
           alert("Product created");
+          router.push("Home");
         })
         .catch((err) => {
           alert(err);

@@ -1,12 +1,10 @@
 <template>
   <div class="user-chats" v-if="chats !== null && chats !== undefined">
-    <div class="users-container">
+    <div id="users-container">
       <b>Users:</b>
-      <div id="users" v-for="chatEl in chats" :key="chatEl._id">
-        <div class="user" v-if="chatEl !== null"  v-on:click="openChat(chatEl)">
-            {{ otherUser(chatEl) }}
-            <div v-if="checkChat(chatEl)">(unread)</div>
-        </div>
+      <div class="user" v-for="chatEl in chats" :key="chatEl._id" v-on:click="openChat(chatEl)">
+        {{ otherUser(chatEl) }}
+        <div v-if="checkChat(chatEl)">(unread)</div>
       </div>
     </div>
     <div id="chat-container">
@@ -75,26 +73,38 @@ export default {
 
 <style lang="scss" scoped>
 .user-chats {
-  padding-top: 50px;
-  .users-container {
-    float: left;
-    position: fixed;
-    width: 15%;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3vmin;
+  padding-top: 5vh;
+  flex-direction: row;
+  #users-container {
+    flex-basis: 20%;
+    border: 1px solid pink;
+    flex-direction: column;
     text-align: center;
-  }
-  #users  {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    height: 0%;
+    flex: 1;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     .user {
+      margin: 1vh auto;
       background-color: gray;
       color: black;
-      width: 100%;
     }
   }
   #chat-container {
-    float: left;
-    padding-left: 20%;
-    width: 85%;
+    flex-basis: 80%;
+    //margin-left: 20vw;
+    // flex-grow: 1;
+    // display: flex;
+    //flex-wrap: wrap;
+    //justify-content: flex-start;
+    //overflow: auto;
   }
 }
+
 </style>

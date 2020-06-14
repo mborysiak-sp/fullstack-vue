@@ -1,16 +1,14 @@
 <template>
   <div class="chat" v-if="chat !== null && chat !== undefined">
-    <div class="username">
-      Chatting with: {{ otherUser }}
+    <div class="message" v-for="message in chat.messages" :key="message._id">
+      <div class="username">{{ message.username }}:</div>
+      <div class="text">{{ message.text }}</div>
     </div>
-    <table class="table-chat">
-      <tr><div v-for="message in chat.messages" :key="message._id">
-        <th> {{ message.username }}: </th><td>{{ message.text }}</td>
-      </div></tr>
-      <tr id="input"><label>Type your message:</label>
+    <div id="input-message">
+      <label>Type your message:</label>
       <input id="message-text" v-model="text" type="text" placeholder="Text" required>
-      <button @click="send()">Send</button></tr>
-    </table>
+      <button @click="send()">Send</button>
+    </div>
   </div>
 </template>
 
@@ -92,20 +90,20 @@ export default {
 
 <style lang="scss" scoped>
 .chat {
-  .username {
-    font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  .message {
+    text-align: left;
+    .username {
+      word-break: break-all;
+    }
+    .text {
+      word-break: break-all;
+    }
   }
-  table {
-    label {
-      font-weight: 700;
-    }
-    tr {
-      text-align: left;
-      td {
-        display: flex;
-        word-break: break-all;
-      }
-    }
+  #input-message {
+
   }
 }
 </style>

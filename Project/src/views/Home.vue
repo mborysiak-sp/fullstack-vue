@@ -61,9 +61,8 @@ export default {
 
 <style scoped lang="scss">
 .home {
-  height: 100%;
-  text-align: center;
-  width: 75%;
+  display: table;
   margin: auto;
+  padding: auto;
 }
 </style>
