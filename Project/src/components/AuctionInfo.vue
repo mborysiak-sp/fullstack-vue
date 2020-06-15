@@ -1,19 +1,19 @@
 <template>
   <div class="auction-info">
     <div class="container">
-      <div class="element">Name: {{ auction.name }}</div>
-      <div class="element">User: {{ auction.username }}</div>
-      <div class="element">Description: {{ auction.description }}</div>
+      <div class="element"><span>Name:</span> {{ auction.name }}</div>
+      <div class="element"><span>User:</span> {{ auction.username }}</div>
+      <div class="element"><span>Description:</span> {{ auction.description }}</div>
       <div v-if="auction.status === 'ONGOING' || auction.status === 'NEW'">
-        <div class="element">Current price: {{ auction.price }}</div>
+        <div class="element"><span>Current price:</span> {{ auction.price }}</div>
       </div>
       <div v-if="auction.type === 'BID'">
-        <div class="element">Due date: {{ this.convertToDate(auction.date) }}</div>
-        <div class="element">Highest bidder: {{ auction.highest_bidder }}</div>
+        <div class="element"><span>Due date:</span> {{ this.convertToDate(auction.date) }}</div>
+        <div class="element"><span>Highest bidder:</span> {{ auction.highest_bidder }}</div>
       </div>
       <div v-if="auction.status === 'SOLD'">
-        <div class="element">Bought for: {{ auction.price }}</div>
-        <div class="element">Buyer: {{ auction.highest_bidder }}</div>
+        <div class="element"><span>Bought for:</span> {{ auction.price }}</div>
+        <div class="element"><span>Buyer:</span> {{ auction.highest_bidder }}</div>
       </div>
     </div>
   </div>
@@ -51,10 +51,16 @@ export default {
 <style lang="scss" scoped>
 .auction-info {
   .container {
-    text-align: center;
     display: flex;
+    word-break: break-all;
     flex-flow: column wrap;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    span {
+      font-weight: bold;
+      text-align: left;
+      color: rgb(0, 0, 0);
+      text-shadow: rgb(122, 122, 122) 4px 3px 0px;
+    }
   }
 }
 </style>

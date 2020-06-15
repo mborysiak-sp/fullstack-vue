@@ -32,7 +32,7 @@ export default {
     margin: 4px;
     text-align: left;
     word-break: break-all;
-    background-color: #dfdfdf;
+    background-color: #b967ff;
     border-radius: 4px;
   }
   .username {

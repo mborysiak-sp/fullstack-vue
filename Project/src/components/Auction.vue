@@ -151,9 +151,10 @@ export default {
 
 <style lang="scss" scoped>
   .auction {
-    padding: 1vmax;
+    padding: 3vmax;
     margin: 1vmax;
     border-radius: 10vmax;
-    background: #639FAB;
+    //width: 100%;
+    background: #b967ff;
   }
 </style>

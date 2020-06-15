@@ -26,6 +26,21 @@ export default {
 <style lang="scss">
 body {
   overflow: hidden;
+  ::-webkit-scrollbar
+  {
+    width: 1vw;
+    height: 1vh;
+  }
+
+  ::-webkit-scrollbar-track
+  {
+    background: #05ffa1
+  }
+
+  ::-webkit-scrollbar-thumb
+  {
+    background: #ff71ce;
+  }
 }
 .app {
   padding-top: 0;
@@ -33,10 +48,10 @@ body {
   top: 0;
   height: 100vh;
   font-family: Helvetica, Arial, sans-serif;
-  background: linear-gradient(to right, #57c1eb 0%,#639FAB 100%);
+  background: linear-gradient(to top, #01cdfe 0%,#b967ff 100%);
 }
 button {
-  background-color: #3333;
+  background-color: #fffb96;
   font-weight: 600;
   text-align: center;
   padding: 5px;

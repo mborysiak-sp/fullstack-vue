@@ -26,7 +26,7 @@ export default {
   props: ["id", "emitter"],
   methods: {
     send () {
-      if (document.getElementById("message-form").value === "") {
+      if (this.text === "") {
       } else {
         const body = {
           _id: this.id,
@@ -34,6 +34,7 @@ export default {
           text: this.text
         };
         this.emitter.emit("new_message", body);
+        this.text = "";
       }
     }
   }

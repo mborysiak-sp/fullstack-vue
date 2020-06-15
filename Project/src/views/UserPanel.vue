@@ -5,7 +5,6 @@
     <div v-show="!currentComponent" v-for="component in componentsArray" v-bind:key="component.name">
       <button class="swap-button" @click="swapComponent(component)">{{component.name}}</button>
     </div>
-    <!-- <==<button class="close-button" v-if="currentComponent !== null" @click="swapComponent(null)">Close</button> -->
   </div>
 </template>
 

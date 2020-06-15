@@ -91,7 +91,6 @@ export default {
     flex-direction: column;
     box-sizing: border-box;
     overflow-y: auto;
-    //padding-bottom: 30vh;
   }
 }
 </style>

@@ -99,18 +99,13 @@ export default {
   margin: 2vh auto 5vh auto;
   padding: 1vh auto;
   height: 70vh;
+  text-align: center;
   overflow: auto;
-  //padding-bottom: 10vh;
   .container {
     text-align: center;
     display: flex;
-    //height: 98vh;
-    //overflow-y: scroll;
     flex-flow: column;
     justify-content: space-around;
-  }
-  .load-button {
-    background-color: purple;
   }
 }
 </style>

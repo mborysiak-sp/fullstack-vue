@@ -12,10 +12,10 @@
     <div v-if="isAuthenticated" class="item">
       <router-link to="/userChatsView">User chats</router-link>
     </div>
-    <div v-if="isAuthenticated" class="item" id="item">
-      <input type="button" @click="logoff" value="Logout">
+    <div v-if="isAuthenticated" class="item">
+      <button @click="logoff">Logout</button>
     </div>
-    <div v-if="isAuthenticated" class="item" id="item">
+    <div v-if="isAuthenticated" class="item">
       Logged as: {{ user.username }}
     </div>
   </div>
@@ -49,25 +49,27 @@ export default {
 
 <style lang="scss">
 .navbar {
-  background-color: #222222;
+  background-color: #b967ff;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   justify-content: space-between;
   text-align: center;
   min-height: 5vh;
   max-height: 20vh;
+  word-break: break-all;
+  word-wrap: break-word;
   padding: 0 auto 5vh auto;
   margin: 0 auto 5vh auto;
-        font-weight: bold;
-      color: #BBCDE5;
+  font-weight: bold;
+  color: #01cdfe;
   .item {
     padding: 1vmax;
     a {
       font-weight: bold;
       text-decoration: none;
-      color: #BBCDE5;
+      color: #01cdfe;
       &.router-link-exact-active {
-        color: #1C5D99;
+        color: #05ffa1;
       }
     }
   }
