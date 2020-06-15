@@ -23,13 +23,10 @@ export default {
 
 <style lang="scss" scoped>
 .message {
-  display: block;
+  display: flex;
+  flex-direction: column;
   max-width: 50%;
-  float: left;
   clear: both;
-  span {
-    display: block;
-  }
   .text {
     padding: 8px;
     margin: 4px;
@@ -39,7 +36,6 @@ export default {
     border-radius: 4px;
   }
   .username {
-    float: left;
     margin: 4px;
     font-size: 10px;
     color: red;
@@ -51,7 +47,7 @@ export default {
 }
 
 .message.me {
-  float: right;
+  margin-left: auto;
   br.me {
     display: none;
   }

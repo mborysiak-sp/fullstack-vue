@@ -1,33 +1,31 @@
 <template>
   <div class="chat" v-if="chat !== null && chat !== undefined">
-    <Message v-for="message in chat.messages" :message="message" :key="message._id" />
-    <div id="input-message">
-      <label>Type your message:</label>
-      <input id="message-text" v-model="text" type="text" placeholder="Text" required>
-      <button @click="send()">Send</button>
+    <div id="message-container">
+      <Message v-for="message in chat.messages" :message="message" :key="message._id" />
     </div>
+    <MessageForm :id="chat._id" :emitter="emitter"/>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import Message from "@/components/Message";
+import MessageForm from "@/components/MessageForm";
 import io from "socket.io-client";
 
 function scrollBottom () {
-  this.$el.scrollTo(0, this.$el.scrollHeight);
+  document.getElementById("message-container").scrollTo(0, document.getElementById("message-container").scrollHeight);
 }
 
 export default {
   name: "Chat",
-  components: { Message },
+  components: { Message, MessageForm },
   computed: {
     ...mapGetters(["user", "isAuthenticated"])
   },
   data () {
     return {
-      emitter: io(),
-      text: ""
+      emitter: io()
     };
   },
   watch: {
@@ -60,23 +58,12 @@ export default {
         console.log("Send seen");
         this.emitter.emit("seen", { _id: this.chat._id, username: this.user.username });
       }
-    },
-    send () {
-      if (document.getElementById("message-text").value === "") {
-      } else {
-        console.log("Chat id =" + this.chat._id);
-        const body = {
-          _id: this.chat._id,
-          username: this.user.username,
-          text: this.text
-        };
-        this.emitter.emit("new_message", body);
-      }
     }
   },
   created () {
     if (this.isAuthenticated) {
       this.emitter.emit("join", { _id: this.chat._id, username: this.user.username });
+      this.$nextTick(scrollBottom);
     }
 
     this.emitter.on("new_message", (cb) => {
@@ -94,15 +81,17 @@ export default {
 
 <style lang="scss" scoped>
 .chat {
-  display: block;
-  height: 50vh;
-  height: inherit;
-  width: 100%;
-  padding: 2% 4%;
-  box-sizing: border-box;
-  overflow-y: scroll;
-  #input-message {
-    float: left;
+  #message-container {
+    display: flex;
+    flex-shrink: 0;
+    flex-grow: 1;
+    height: 50vh;
+    align-self: center;
+    padding: 2vh 4vw;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow-y: auto;
+    //padding-bottom: 30vh;
   }
 }
 </style>

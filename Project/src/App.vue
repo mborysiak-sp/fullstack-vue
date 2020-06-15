@@ -24,10 +24,14 @@ export default {
 </script>
 
 <style lang="scss">
-body {}
+body {
+  overflow: hidden;
+}
 .app {
-  //font-family: "MetaWeb-Normal", sans-serif;
-  padding-top: 5vh;
+  padding-top: 0;
+  margin-top: 0;
+  top: 0;
+  height: 100vh;
   font-family: Helvetica, Arial, sans-serif;
   background: linear-gradient(to right, #57c1eb 0%,#639FAB 100%);
 }

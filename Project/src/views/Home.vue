@@ -63,6 +63,5 @@ export default {
 .home {
   display: table;
   margin: auto;
-  padding: auto;
 }
 </style>

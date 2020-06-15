@@ -25,5 +25,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+.owned-auctions {
+  display: table;
+  margin: auto;
+}
 </style>

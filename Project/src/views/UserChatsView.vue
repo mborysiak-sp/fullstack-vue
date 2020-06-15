@@ -22,7 +22,7 @@ export default {
 
 <style lang="scss" scoped>
 .user-chats-view {
-  margin: auto;
-  padding: auto;
+  // margin-top: 10vh;
+  // margin-bottom: 10vh;
 }
 </style>

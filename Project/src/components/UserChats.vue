@@ -84,18 +84,19 @@ export default {
     text-align: center;
     height: 0%;
     flex: 1;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     display: flex;
     align-items: center;
     justify-content: space-between;
     .user {
+      background-color: #BBCDE5;
       margin: 1vh auto;
-      background-color: gray;
-      color: black;
+      border-radius: 10vmax;
+      padding: 1vmax;
+      border: 1px solid pink;
     }
   }
   #chat {
-    //height: 50vh;
     flex-basis: 80%;
   }
 }

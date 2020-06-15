@@ -20,9 +20,9 @@ export default {
 
 <style>
 .register {
-  margin-top: 10vh;
-  padding: 10px;
-  background-color:wheat;
-  height: 100%;
+  height: 50vh;
+  overflow: auto;
+  padding-top: 10vh;
+  padding-bottom: 10vh;
 }
 </style>

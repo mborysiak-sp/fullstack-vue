@@ -24,6 +24,10 @@
         <label>Ending date:</label>
         <input type="date" v-model="auction.date" placeholder="date">
       </div>
+      <!-- <div class="element">
+        <label>Start now:</label>
+        <input type="checkbox" v-model="status" true-value="ONGOING" false-value="NEW">
+      </div> -->
       <div class="element">
         <input type="button" @click="put()" value="Submit">
       </div>

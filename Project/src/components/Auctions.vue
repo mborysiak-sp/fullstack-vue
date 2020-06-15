@@ -1,8 +1,8 @@
 <template>
   <div class="auctions">
-      <div class="container" v-for="auction in auctions" :key="auction._id">
-        <Auction :auction="auction" />
-      </div>
+    <div class="container">
+      <Auction v-for="auction in auctions" :auction="auction" :key="auction._id" />
+    </div>
       <button v-if="currentAuctions != 0 && currentAuctions % 10 === 0" class="load-button" @click="loadAuctions">Load more auctions</button>
   </div>
 </template>
@@ -95,20 +95,19 @@ export default {
 
 <style lang="scss" scoped>
 .auctions {
-  margin-top: 1vh;
-  display: inline-block;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 1vh;
-  //background-color: #639FAB;
   border-radius: 5vmax;
-  padding: 3vmin;
-  padding-top: 5vh;
+  margin: 2vh auto 5vh auto;
+  padding: 1vh auto;
+  height: 70vh;
+  overflow: auto;
+  //padding-bottom: 10vh;
   .container {
     text-align: center;
     display: flex;
-    flex-flow: column wrap;
-    justify-content: space-evenly;
+    //height: 98vh;
+    //overflow-y: scroll;
+    flex-flow: column;
+    justify-content: space-around;
   }
   .load-button {
     background-color: purple;
