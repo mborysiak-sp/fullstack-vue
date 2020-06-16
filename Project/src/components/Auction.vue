@@ -31,7 +31,7 @@ import AuctionInfo from "./AuctionInfo";
 import axios from "axios";
 import router from "../router/index";
 import AuctionEditForm from "./AuctionEditForm";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 
 export default {
   name: "Auction",
@@ -43,12 +43,12 @@ export default {
   data () {
     return {
       editMode: false,
-      emitter: io(),
+      // emitter: this.emitter,
       price: ""
     };
   },
   computed: {
-    ...mapGetters(["user", "isAuthenticated"]),
+    ...mapGetters(["user", "isAuthenticated", "emitter"]),
     editable: function () {
       return this.isAuthenticated === true && this.auction.username === this.user.username && this.auction.status === "NEW";
     },
@@ -128,7 +128,12 @@ export default {
         username: this.user.username
       });
     }
-
+    // this.emitter.on("over_bidded", (cb) => {
+    //   console.log("przechwyciłem emita");
+    //   if (cb.username === this.user.username) {
+    //     alert(`You were over bidded in auction: ${cb._id}`);
+    //   }
+    // });
     this.emitter.on("start", (cb) => {
       console.log("changing value");
       this.auction.status = "ONGOING";
@@ -141,6 +146,9 @@ export default {
     });
 
     this.emitter.on("new_bid", (cb) => {
+      if (cb._id !== this.auction._id) {
+        return;
+      }
       console.log("new bid");
       this.auction.price = cb.price;
       this.auction.highest_bidder = cb.highest_bidder;

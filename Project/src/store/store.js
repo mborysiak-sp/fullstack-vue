@@ -3,15 +3,15 @@ import Vuex from "vuex";
 
 import auth from "./auth";
 import error from "./error";
-// import socket from "./socket";
+import emitter from "./emitter";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     auth,
-    error
-    // socket
+    error,
+    emitter
   },
   state: {
   },

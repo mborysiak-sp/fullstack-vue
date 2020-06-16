@@ -17,7 +17,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isAuthenticated", "user"])
+    ...mapGetters(["isAuthenticated", "user", "emitter"])
   },
   methods: {
     ...mapActions(["setUser"]),

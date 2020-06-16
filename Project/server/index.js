@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({
 // Services config
 const auctionService = require("./service/auctionService");
 const chatService = require("./service/chatService");
+const userService = require("./service/userService");
 const Message = require("./model/index").Message;
 
 // Session config
@@ -63,7 +64,6 @@ const isAuthenticated = (socket) => {
 let lock = false;
 
 io.on("connection", (socket) => {
-
   const username = socket.request.user.username;
 
   socket.on("join", (cb) => {
@@ -148,10 +148,29 @@ io.on("connection", (socket) => {
         auctionService.partialUpdate(body, (error) => {
           lock = false;
           if (error) {
-            io.sockets.in(cb._id).emit("error");
+            io.to(cb._id).emit("error");
           } else {
-            io.sockets.in(cb._id).emit("new_bid", cb);
-            console.log(`[Socket]: New bid from user: ${cb.highest_bidder}`);
+            io.to(cb._id).emit("new_bid", cb);
+            // console.log(`[Socket]: New bid from user: ${cb.highest_bidder}`);
+            for (const bidder of bidders) {
+              if (bidder !== cb.highest_bidder) {
+                const cbToUser = {
+                  _id: cb._id,
+                  username: bidder
+                };
+                // console.log("wysyłam emita do" + bidder);
+                // io.emit("over_bidded", cbToUser);
+                let socketId = 0;
+                const currSocks = io.sockets.clients();
+                console.dir(currSocks);
+                for (const sock of currSocks) {
+                  if (sock.request.user.username === bidder) {
+                    socketId = sock.id;
+                  }
+                }
+                io.to(socketId).emit("over_bidded", cbToUser);
+              }
+            }
           }
         });
       }

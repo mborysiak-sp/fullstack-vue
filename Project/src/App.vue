@@ -7,18 +7,45 @@
 
 <script>
 import Navbar from "@/components/Navbar";
-import { mapActions } from "vuex";
+// import Notification from "@/components/Notification";
+import { mapActions, mapGetters } from "vuex";
+// import Vue from "vue";
+// const Classs = Vue.extend(Notification);
+// const instance = new Classs();
+// instance.$mount();
 
 export default {
   name: "App",
   components: {
     Navbar
   },
+  computed: {
+    ...mapGetters(["emitter", "user"])
+  },
   methods: {
-    ...mapActions(["setUser"])
+    ...mapActions(["setUser", "setEmitter"])
+    // join () {
+    //   if (this.isAuthenticated) {
+    //     this.emitter.emit("join", { _id: this.user.username, username: this.user.username });
+    //   }
+    // }
   },
   created () {
     this.setUser();
+    this.setEmitter();
+    // this.emitter.emit("join", {
+    //   _id: this.user.username,
+    //   username: this.user.username
+    // });
+    console.log(this.emitter);
+    this.emitter.on("over_bidded", (cb) => {
+      console.log("przechwyciłem emita");
+      if (cb.username === this.user.username) {
+        alert(`You were over bidded in auction: ${cb._id}`);
+        // this.$refs.container.appendChild(instance.$el);
+        // this.$refs.container.appendChild(new this.c());
+      }
+    });
   }
 };
 </script>

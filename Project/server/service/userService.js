@@ -46,6 +46,13 @@ module.exports.currentUser = (req, res) => {
   }
 };
 
+module.exports.getIdByUsername = async (req, res) => {
+  console.dir(req.username);
+  const doc = await User.findOne({ username: req.username });
+  console.dir(doc);
+  return doc;
+};
+
 module.exports.logout = (req, res) => {
   req.logout();
   res.send();

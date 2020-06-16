@@ -11,7 +11,6 @@
 import { mapGetters } from "vuex";
 import Message from "@/components/Message";
 import MessageForm from "@/components/MessageForm";
-import io from "socket.io-client";
 
 function scrollBottom () {
   document.getElementById("message-container").scrollTo(0, document.getElementById("message-container").scrollHeight);
@@ -21,11 +20,11 @@ export default {
   name: "Chat",
   components: { Message, MessageForm },
   computed: {
-    ...mapGetters(["user", "isAuthenticated"])
+    ...mapGetters(["user", "isAuthenticated", "emitter"])
   },
   data () {
     return {
-      emitter: io()
+      // emitter: this.emitter
     };
   },
   watch: {
