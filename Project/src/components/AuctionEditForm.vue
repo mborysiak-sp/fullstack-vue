@@ -3,15 +3,15 @@
     <form>
       <div class="element">
         <label>Name:</label>
-        <input v-model="auction.name" id="name" type="text" minlength="2" placeholder="Name">
+        <input v-model="auction.name" id="name" type="text" minlength="2" maxlength="32" placeholder="Name">
       </div>
       <div class="element">
         <label>Price:</label>
-        <input v-model="auction.price" id="price" type="number" min="1" step="1" placeholder="Price">
+        <input v-model="auction.price" id="price" type="number" min="1" max="1000000" step="1" placeholder="Price">
       </div>
       <div class="element">
         <label>Auction description:</label>
-        <input v-model="auction.description" id="description" type="text" placeholder="Description">
+        <input v-model="auction.description" id="description" type="text" minLength="2" maxLength="128" placeholder="Description">
       </div>
       <div class="element">
         <label>Type:</label>
@@ -24,10 +24,6 @@
         <label>Ending date:</label>
         <input type="date" v-model="auction.date" placeholder="date">
       </div>
-      <!-- <div class="element">
-        <label>Start now:</label>
-        <input type="checkbox" v-model="status" true-value="ONGOING" false-value="NEW">
-      </div> -->
       <div class="element">
         <input type="button" @click="put()" value="Submit">
       </div>

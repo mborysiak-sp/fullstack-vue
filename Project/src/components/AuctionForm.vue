@@ -2,15 +2,15 @@
   <div class="auction-form">
     <div class="element">
       <label>Name:</label>
-      <input v-model="name" id="name" type="text" minlength="2" placeholder="Name">
+      <input v-model="name" id="name" type="text" minlength="2" maxLength="32" placeholder="Name">
     </div>
     <div>
       <label>Price:</label>
-      <input v-model="price" id="price" type="number" min="1" step="1" placeholder="Price">
+      <input v-model="price" id="price" type="number" min="1" max="1000000" step="1" placeholder="Price">
     </div>
     <div class="element">
       <label>Auction description:</label>
-      <input v-model="description" id="description" type="text" placeholder="Description">
+      <input v-model="description" id="description" type="text" minLength="2" maxLength="128" placeholder="Description">
     </div>
     <div class="element">
       <label>Type:</label>
@@ -35,7 +35,7 @@
 
 <script>
 import axios from "axios";
-import router from "../router";
+// import router from "../router";
 
 export default {
   name: "AuctionForm",
@@ -68,7 +68,7 @@ export default {
       )
         .then(() => {
           alert("Product created");
-          router.push("Home");
+          this.$forceUpdate();
         })
         .catch((err) => {
           alert(err);

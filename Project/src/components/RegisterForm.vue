@@ -6,6 +6,8 @@
       <input
         type="text"
         name="username"
+        maxlength="8"
+        minlength="1"
         v-model="username"
         required >
       <label>Password</label>
@@ -13,6 +15,8 @@
         type="password"
         name="password"
         v-model="password"
+        minLength="4"
+        maxLength="256"
         required >
       <input type="button" @click="register" value="Submit">
       <input type="button" @click="clear" value="Clear">
